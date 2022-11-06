@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "114828264427",
+    "project_id": "law-tech-app-30499",
+    "storage_bucket": "law-tech-app-30499.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114828264427:android:0c82d9a2c5a3cda870cfae",
+        "android_client_info": {
+          "package_name": "com.example.law_tech_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114828264427-oii8ga3tija44b52m9vb74cmcb95021d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.law_tech_app",
+            "certificate_hash": "6951e65b46062624cc3cd355c34f656d804c8053"
+          }
+        },
+        {
+          "client_id": "114828264427-73db0vgqa9rn2djtqp24770uo9lmsd0l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpww1l7x3zKpSZwdxrDkPZgdu_s_93M_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114828264427-73db0vgqa9rn2djtqp24770uo9lmsd0l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
