@@ -1,5 +1,6 @@
 package com.example.law_tech_app
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
