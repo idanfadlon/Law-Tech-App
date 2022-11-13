@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Law-Tech-App</string>
+    <string name="as_client"><u>Client</u></string>
+    <string name="as_lawyer"><u>Lawyer</u></string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="please_wait">Loading..</string>
+    <string name="err_msg_enter_email"><b>Email is missing ! Please enter email !</b></string>
+    <string name="err_msg_enter_password"><b>Password is missing ! Please enter password !</b></string>
 </resources>

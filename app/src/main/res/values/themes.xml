@@ -16,6 +16,8 @@
     <style name="Theme.LawTechApp.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowDisablePreview">true</item>
+
 
     </style>
 </resources>
