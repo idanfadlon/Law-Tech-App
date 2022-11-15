@@ -5,12 +5,12 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
@@ -20,8 +20,11 @@ class LoginActivity: BaseActivity() {
     lateinit var tie_password: TextInputEditText
     lateinit var login_btn:Button
     lateinit var forgotPasswordTv:TextView
+    lateinit var tvRegister:TextView
 
 
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -38,21 +41,35 @@ class LoginActivity: BaseActivity() {
         radioGroup.setOnCheckedChangeListener{_, checkedId ->
            onRadioClick(checkedId)
         }
-        tie_email = findViewById(R.id.tie_email)
+        tie_email = findViewById(R.id.tie_forgotpassword_email)
         tie_email.hint=("Email")
         tie_password = findViewById(R.id.tie_password)
         tie_password.hint=("Password")
-        login_btn = findViewById(R.id.login_button)
+        login_btn = findViewById(R.id.btn_login)
         login_btn.setOnClickListener {
             logInRegisteredUser()
         }
         forgotPasswordTv = findViewById(R.id.forgot_password_tv)
+        forgotPasswordTv.setOnClickListener{
+            //TODO: add navigate to forgot password screen
+            val intent = Intent(this@LoginActivity, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+        }
+        tvRegister = findViewById(R.id.tv_login_register)
+        tvRegister.setOnClickListener{
+            //TODO: add navigate to register screen
+            Toast.makeText(this,"clicked",Toast.LENGTH_SHORT).show()
+        }
+
     }
 
 private fun onRadioClick(id:Int){
     if(id==R.id.rb_client)
         tie_email.hint = "Email"
-    else tie_email.hint="License Number"
+    else {
+        tie_email.hint = "License Number"
+
+    }
     }
 
     private fun validateLoginDetails(): Boolean {
@@ -75,7 +92,7 @@ private fun onRadioClick(id:Int){
         if (validateLoginDetails()) {
 
             // Show the progress dialog.
-            showProgressDialog(resources.getString(R.string.please_wait))
+            showProgressDialog(resources.getString(R.string.loading))
 
             // Get the text from editText and trim the space
             val email = tie_email.text.toString().trim { it <= ' ' }
@@ -88,6 +105,7 @@ private fun onRadioClick(id:Int){
                         hideProgressDialog()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
+                        finish()
 
 //                        FirestoreClass().getUserDetails(this@LoginActivity)
                     } else {
@@ -98,14 +116,6 @@ private fun onRadioClick(id:Int){
                 }
         }
     }
-
-
-
-
-
-
-
-
 
 }
 

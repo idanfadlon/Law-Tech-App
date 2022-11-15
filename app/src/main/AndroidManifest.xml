@@ -30,7 +30,14 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.LawTechApp.NoActionBar">
+            android:theme="@style/Theme.LawTechApp.NoActionBar"
+            android:screenOrientation="fullSensor">
+        </activity>
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="true"
+            android:theme="@style/Theme.LawTechApp.NoActionBar"
+            android:screenOrientation="fullSensor">
 
         </activity>
 
