@@ -5,11 +5,14 @@
     <string name="forgot_password">Forgot Password ?</string>
     <string name="loading">Loading..</string>
     <string name="err_msg_enter_email"><b>Email is missing ! Please enter email !</b></string>
-    <string name="err_msg_enter_password"><b>Password is missing ! Please enter password !</b></string>ont
+    <string name="err_msg_enter_password"><b>Password is missing ! Please enter password !</b></string>
+    ont
     <string name="dont_have_account">Don\'t have an account ?</string>
     <string name="register">Register</string>
     <string name="forgot_password_tv1"><b>Forgot your password ?</b></string>
     <string name="forgot_password_tv2">Enter your email address and we\'ll send you a mail to reset your password</string>
     <string name="email_sent"><b>Email sent successfully !</b></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
