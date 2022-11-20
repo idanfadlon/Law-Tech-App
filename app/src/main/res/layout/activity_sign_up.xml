@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/drawable_type_tab_selector"
                 android:button="@null"
-                android:checked="true"
+                android:checked="false"
                 android:gravity="center"
                 android:text="@string/as_client"
                 android:textColor="@drawable/drawable_type_tab_text_color_selector"
@@ -96,6 +96,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/drawable_type_tab_selector"
                 android:button="@null"
+                android:checked="true"
                 android:gravity="center"
                 android:text="@string/as_lawyer"
                 android:textColor="@drawable/drawable_type_tab_text_color_selector"
@@ -118,6 +119,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
+                android:hint="Enter your name"
+                android:inputType="text"
                 android:visibility="visible"
                 tools:visibility="visible" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -137,6 +140,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
+                android:hint="Enter your email"
+                android:inputType="textEmailAddress"
                 android:visibility="visible"
                 tools:visibility="visible" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -156,6 +161,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
+                android:hint="Enter your password"
+                android:inputType="textPassword"
                 android:visibility="visible"
                 tools:visibility="visible" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -175,6 +182,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
+                android:hint="retype your password"
+                android:inputType="textPassword"
                 android:visibility="visible"
                 tools:visibility="visible" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -187,15 +196,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/til_confirmPassword"
-            tools:visibility="visible">
+            tools:visibility="invisible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tie_licenseNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:visibility="visible"
-                tools:visibility="visible" />
+                android:hint="Enter your license number"
+                android:inputType="number"
+                android:visibility="invisible"
+                tools:visibility="invisible" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -205,7 +216,7 @@
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/til_licenseNumber"
+            app:layout_constraintTop_toBottomOf="@+id/til_confirmPassword"
             tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -213,6 +224,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
+                android:hint="Enter your phone number"
+                android:inputType="phone"
                 android:visibility="visible"
                 tools:visibility="visible" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -225,16 +238,44 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/til_phoneNumber"
-            tools:visibility="visible">
+            tools:visibility="invisible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tie_summary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:visibility="visible"
-                tools:visibility="visible" />
+                android:hint="Tell about yourself"
+                android:inputType="text"
+                android:visibility="invisible"
+                tools:visibility="invisible" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_signup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:background="@color/yellow"
+            android:text="Sign Up"
+            android:textColor="@color/primary"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_phoneNumber" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/yellow"
+            android:text="Already have account? Sign In !"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_signup" />
 
 
 
