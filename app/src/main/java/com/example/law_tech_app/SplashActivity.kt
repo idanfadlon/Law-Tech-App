@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.WindowInsets
 import android.view.WindowManager
+import com.example.law_tech_app.activities.SignUpActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +29,8 @@ class SplashActivity : AppCompatActivity() {
         @Suppress("DEPRECATION")
         Handler().postDelayed(
             {
-                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+//                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                  startActivity(Intent(this@SplashActivity, SignUpActivity::class.java))
                 finish()
             },
             2000

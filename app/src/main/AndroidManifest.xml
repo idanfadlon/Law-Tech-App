@@ -43,6 +43,12 @@
             android:screenOrientation="fullSensor">
 
         </activity>
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.LawTechApp.NoActionBar"
+            android:screenOrientation="fullSensor">
+        </activity>
 
 
     </application>

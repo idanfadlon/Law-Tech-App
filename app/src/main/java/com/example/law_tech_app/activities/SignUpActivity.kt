@@ -1,19 +1,15 @@
-package com.example.law_tech_app
+package com.example.law_tech_app.activities
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Button
 import android.widget.RadioGroup
-import android.widget.TextView
+import com.example.law_tech_app.BaseActivity
+import com.example.law_tech_app.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.FirebaseAuth
 
 
 class SignUpActivity : BaseActivity() {
@@ -21,8 +17,8 @@ class SignUpActivity : BaseActivity() {
     lateinit var tieEmail: TextInputEditText
     lateinit var tiePassword: TextInputEditText
     lateinit var tieConfirmPassword: TextInputEditText
-    lateinit var tieLicenseNumber: TextInputEditText
     lateinit var tiePhoneNumber: TextInputEditText
+    lateinit var tieLicenseNumber: TextInputEditText
     lateinit var tieSummary: TextInputEditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,17 +37,19 @@ class SignUpActivity : BaseActivity() {
         radioGroup.setOnCheckedChangeListener{_,checkedId->
             onRadioClick(checkedId)
         }
+        tieLicenseNumber=findViewById(R.id.tie_licenseNumber)
+        tieSummary=findViewById(R.id.tie_summary)
     }
 
     private fun onRadioClick(checkedId: Int) {
-        if(checkedId==R.id.rb_lawyer){
+        if(checkedId== R.id.rb_client){
             val tilLicenseNumber=findViewById<TextInputLayout>(R.id.til_licenseNumber)
             val tilSummary=findViewById<TextInputLayout>(R.id.til_summary)
-            val tilPhoneNumber=findViewById<TextInputLayout>(R.id.til_phoneNumber)
             tilLicenseNumber.visibility=View.VISIBLE
             tieLicenseNumber.visibility=View.VISIBLE
             tilSummary.visibility=View.VISIBLE
             tieSummary.visibility=View.VISIBLE
+            println("im after visible")
 
         }
 

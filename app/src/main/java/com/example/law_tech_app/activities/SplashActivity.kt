@@ -38,7 +38,8 @@ class SplashActivity : AppCompatActivity() {
 //                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
 //                    finish()
 //                }
-                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+//                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                startActivity(Intent(this@SplashActivity, SignUpActivity::class.java))
                  finish()
 
             },
