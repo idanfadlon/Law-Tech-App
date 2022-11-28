@@ -199,11 +199,11 @@
                 android:id="@+id/til_licenseNumber"
                 android:layout_width="323dp"
                 android:layout_height="62dp"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/til_confirmPassword"
-                tools:visibility="invisible">
+                tools:visibility="gone">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tie_licenseNumber"
@@ -212,19 +212,19 @@
                     android:textSize="20sp"
                     android:hint="Enter your license number"
                     android:inputType="number"
-                    android:visibility="invisible"
-                    tools:visibility="invisible" />
+                    android:visibility="gone"
+                    tools:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_summary"
         android:layout_width="323dp"
         android:layout_height="62dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_phoneNumber"
-        tools:visibility="invisible">
+        tools:visibility="gone">
 
             <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tie_summary"
@@ -233,8 +233,8 @@
             android:textSize="20sp"
             android:hint="Tell about yourself"
             android:inputType="text"
-            android:visibility="invisible"
-            tools:visibility="invisible" />
+            android:visibility="gone"
+            tools:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
