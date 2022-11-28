@@ -1,5 +1,12 @@
 package com.example.law_tech_app.activities
-
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.text.TextUtils
+import android.widget.Toast
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -42,15 +49,22 @@ class SignUpActivity : BaseActivity() {
     }
 
     private fun onRadioClick(checkedId: Int) {
-        if(checkedId== R.id.rb_client){
+        if(checkedId== R.id.rb_lawyer){
             val tilLicenseNumber=findViewById<TextInputLayout>(R.id.til_licenseNumber)
             val tilSummary=findViewById<TextInputLayout>(R.id.til_summary)
             tilLicenseNumber.visibility=View.VISIBLE
             tieLicenseNumber.visibility=View.VISIBLE
             tilSummary.visibility=View.VISIBLE
             tieSummary.visibility=View.VISIBLE
-            println("im after visible")
 
+        }
+        else{
+            val tilLicenseNumber=findViewById<TextInputLayout>(R.id.til_licenseNumber)
+            val tilSummary=findViewById<TextInputLayout>(R.id.til_summary)
+            tilLicenseNumber.visibility=View.GONE
+            tieLicenseNumber.visibility=View.GONE
+            tilSummary.visibility=View.GONE
+            tieSummary.visibility=View.GONE
         }
 
     }
