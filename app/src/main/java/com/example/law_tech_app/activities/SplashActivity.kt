@@ -8,6 +8,7 @@ import android.os.Handler
 import android.view.WindowInsets
 import android.view.WindowManager
 import com.example.law_tech_app.R
+import com.example.law_tech_app.activities.SignUpActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class SplashActivity : AppCompatActivity() {
@@ -38,7 +39,8 @@ class SplashActivity : AppCompatActivity() {
 //                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
 //                    finish()
 //                }
-                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+//                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                startActivity(Intent(this@SplashActivity, SignUpActivity::class.java))
                  finish()
 
             },
