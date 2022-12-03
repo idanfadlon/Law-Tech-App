@@ -1,7 +1,6 @@
 package com.example.law_tech_app.activities
 import android.content.Intent
 import android.text.TextUtils
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -15,8 +14,6 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.isVisible
 import com.example.law_tech_app.R
 import com.google.android.gms.tasks.Task
@@ -31,6 +28,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
     lateinit var tieConfirmPassword: TextInputEditText
     lateinit var tiePhoneNumber: TextInputEditText
     lateinit var tieLicenseNumber: TextInputEditText
+    lateinit var tieSpecialization: TextInputEditText
     lateinit var tieSummary: TextInputEditText
     lateinit var btnSignUp: Button
     lateinit var mAuth:FirebaseAuth
@@ -57,6 +55,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
         tieConfirmPassword=findViewById(R.id.tie_confirmPassword)
         tiePhoneNumber=findViewById(R.id.tie_phoneNumber)
         tieLicenseNumber=findViewById(R.id.tie_licenseNumber)
+        tieSpecialization =findViewById(R.id.tie_specialization)
         tieSummary=findViewById(R.id.tie_summary)
         btnSignUp=findViewById(R.id.btn_signup)
         mAuth =FirebaseAuth.getInstance()
@@ -73,19 +72,26 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
         if(checkedId== R.id.rb_lawyer){
             val tilLicenseNumber=findViewById<TextInputLayout>(R.id.til_licenseNumber)
             val tilSummary=findViewById<TextInputLayout>(R.id.til_summary)
+            val tilSpecialization=findViewById<TextInputLayout>(R.id.til_specialization)
             tilLicenseNumber.visibility=View.VISIBLE
             tieLicenseNumber.visibility=View.VISIBLE
             tilSummary.visibility=View.VISIBLE
             tieSummary.visibility=View.VISIBLE
+            tilSpecialization.visibility=View.VISIBLE
+            tieSpecialization.visibility=View.VISIBLE
 
         }
         else{
             val tilLicenseNumber=findViewById<TextInputLayout>(R.id.til_licenseNumber)
             val tilSummary=findViewById<TextInputLayout>(R.id.til_summary)
+            val tilSpecialization=findViewById<TextInputLayout>(R.id.til_specialization)
             tilLicenseNumber.visibility=View.GONE
             tieLicenseNumber.visibility=View.GONE
             tilSummary.visibility=View.GONE
             tieSummary.visibility=View.GONE
+            tilSpecialization.visibility=View.GONE
+            tieSpecialization.visibility=View.GONE
+
         }
 
     }
@@ -109,6 +115,10 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
             return when {
                 TextUtils.isEmpty(tieFullName.text.toString().trim { it <= ' ' }) -> {
                     showErrorSnackBar("Please enter full name", true)
+                    false
+                }
+                tieFullName.text.toString().length<2->{
+                    showErrorSnackBar("name must include at last 2 characters",true)
                     false
                 }
                 TextUtils.isEmpty(tieEmail.text.toString().trim { it <= ' ' }) -> {
@@ -135,9 +145,16 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                     showErrorSnackBar("passwords are not matched",true)
                     false
                 }
-                else -> {
-                   true
+                //TODO:fix this also in lawyer validation
+                tiePassword.text.toString().contains("[A-Za-z0-9!\"#$%&'()*+,-./:;\\\\<=>?@\\[\\]^_`{|}~]".toRegex()) ->{
+                    Log.d("passnv","pass not valid")
+                    showErrorSnackBar("password must include characters numbers and symbols",true)
+                    false
+                }
 
+                else -> {
+                    Log.d("passnv","im on else")
+                    true
                 }
             }
 
@@ -148,6 +165,12 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                 showErrorSnackBar("Please enter full name", true)
                 false
             }
+            tieFullName.text.toString().length<2->{
+                Log.d("fName","name not valid")
+                showErrorSnackBar("name must include at last 2 characters",true)
+                false
+            }
+
             TextUtils.isEmpty(tieEmail.text.toString().trim { it <= ' ' }) -> {
                 showErrorSnackBar("Please enter full name", true)
                 false
@@ -170,6 +193,11 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                 false
             }
 
+            TextUtils.isEmpty(tieSpecialization.text.toString().trim { it<=' ' })->{
+                showErrorSnackBar("Please enter specialization",true)
+                false
+            }
+
             TextUtils.isEmpty(tieSummary.text.toString().trim(){ it<=' '})->{
                 showErrorSnackBar("Please tell a little about yourself",true)
                 false
@@ -182,12 +210,16 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                 showErrorSnackBar("passwords are not matched",true)
                 false
             }
+            !tiePassword.text.toString().contains("[A-Za-z0-9!\"#$%&'()*+,-./:;\\\\<=>?@\\[\\]^_`{|}~]".toRegex()) ->{
+                Log.d("pass","pass not valid")
+                showErrorSnackBar("password must include characters numbers and symbols",true)
+                false
+            }
             else -> {true}
         }
 
     }
     private fun createUserFirebase(){
-        //Log.d("register123456789","enter func")
         val email: String = tieEmail.text.toString().trim { it <= ' ' }
         val password: String = tiePassword.text.toString().trim { it <= ' ' }
         Log.d("register123456789","enter func")
@@ -201,25 +233,20 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
 
             // If the registration is successfully done
                     if (task.isSuccessful) {
-
-                        //Log.d("task1","isSuccessful")
-
                         // Firebase registered user
                         val firebaseUser: FirebaseUser = task.result!!.user!!
                         if (imLawyer) {
-                            Log.d("slawyer","signup from lawyer option")
+                            Log.d("sLawyer","signup from lawyer option")
                             showErrorSnackBar("signup as lawyer has been successfully completed", false)
                         }
                         else{
-                            Log.d("sclient","signup from client option")
+                            Log.d("sClient","signup from client option")
                             showErrorSnackBar("signup as client has been successfully completed", false)
                         }
 
 
 
                     } else {
-                        //Log.d("task1","isFail")
-
                         // If the registering is not successful then show error message.
                         showErrorSnackBar(task.exception!!.message.toString(), true)
                     }
