@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -15,7 +16,10 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.view.isVisible
 import com.example.law_tech_app.R
+import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -28,8 +32,8 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
     lateinit var tiePhoneNumber: TextInputEditText
     lateinit var tieLicenseNumber: TextInputEditText
     lateinit var tieSummary: TextInputEditText
-    lateinit var btnSignUp:Button
-
+    lateinit var btnSignUp: Button
+    lateinit var mAuth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -42,6 +46,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
+
         val radioGroup:RadioGroup = findViewById(R.id.radioGroup)
         radioGroup.setOnCheckedChangeListener{_,checkedId->
             onRadioClick(checkedId)
@@ -54,9 +59,8 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
         tieLicenseNumber=findViewById(R.id.tie_licenseNumber)
         tieSummary=findViewById(R.id.tie_summary)
         btnSignUp=findViewById(R.id.btn_signup)
-        btnSignUp.setOnClickListener{
-            signUpUser()
-        }
+        mAuth =FirebaseAuth.getInstance()
+        btnSignUp.setOnClickListener { this.signUpUser() }
         val tvAlready:TextView=findViewById(R.id.tv_already)
         tvAlready.setOnClickListener{
             val intent =Intent(this@SignUpActivity,com.example.law_tech_app.activities.LoginActivity::class.java)
@@ -87,16 +91,18 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
     }
 
     private fun signUpUser(){
-        val radiochecked=findViewById<RadioButton>(R.id.rb_lawyer)
-        if(radiochecked.isChecked)
+        val radioChecked=findViewById<RadioButton>(R.id.rb_lawyer)
+        if(radioChecked.isChecked) {
             if (validateLawyerSignUpDetails()) {
                 createUserFirebase()
             }
+        }
         else {
                 if (validateClientSignUpDetails()) {
                     createUserFirebase()
                 }
-            }
+        }
+
     }
     private fun validateClientSignUpDetails():Boolean {
 
@@ -181,26 +187,43 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
 
     }
     private fun createUserFirebase(){
+        //Log.d("register123456789","enter func")
         val email: String = tieEmail.text.toString().trim { it <= ' ' }
         val password: String = tiePassword.text.toString().trim { it <= ' ' }
+        Log.d("register123456789","enter func")
+        val imLawyer:Boolean = tieLicenseNumber.isVisible
+
 
         // Create an instance and create a register a user with email and password.
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(
-                OnCompleteListener<AuthResult> { task ->
+        Log.d("firebase","im in line 198")
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{ task: Task<AuthResult> ->
+                    Log.d("task1","im in line 200")
 
-                    // If the registration is successfully done
+            // If the registration is successfully done
                     if (task.isSuccessful) {
+
+                        //Log.d("task1","isSuccessful")
 
                         // Firebase registered user
                         val firebaseUser: FirebaseUser = task.result!!.user!!
+                        if (imLawyer) {
+                            Log.d("slawyer","signup from lawyer option")
+                            showErrorSnackBar("signup as lawyer has been successfully completed", false)
+                        }
+                        else{
+                            Log.d("sclient","signup from client option")
+                            showErrorSnackBar("signup as client has been successfully completed", false)
+                        }
 
-                        Toast.makeText(this,"sign up succss",Toast.LENGTH_SHORT).show()
+
+
                     } else {
+                        //Log.d("task1","isFail")
+
                         // If the registering is not successful then show error message.
                         showErrorSnackBar(task.exception!!.message.toString(), true)
                     }
-                })
+                }
 
     }
 
