@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lawyer_navigation"
+    app:startDestination="@id/icon_menu_calendar">
+    <fragment
+        android:id="@+id/icon_menu_calendar"
+        android:name="com.example.law_tech_app.fragments.LawyerCalendarFragment"
+        android:label="Calendar"
+        tools:layout="@layout/fragment_lawyer_calendar" />
+    <fragment
+        android:id="@+id/icon_menu_notifications"
+        android:name="com.example.law_tech_app.fragments.LawyerNotificationsFragment"
+        android:label="Notifications"
+        tools:layout="@layout/fragment_lawyer_notifications" />
+    <fragment
+        android:id="@+id/icon_menu_profile"
+        android:name="com.example.law_tech_app.fragments.LawyerProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_lawyer_profile" />
+</navigation>
