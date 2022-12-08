@@ -59,7 +59,7 @@ class LoginActivity: BaseActivity() {
         tvRegister = findViewById(R.id.tv_login_register)
         tvRegister.setOnClickListener{
             //TODO: add navigate to register screen
-            onBackPressed()
+            Toast.makeText(this,"clicked",Toast.LENGTH_SHORT).show()
         }
 
     }

@@ -11,10 +11,7 @@
     <FrameLayout
         android:id="@+id/fl_header_img"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_signup"
+        android:layout_height="@dimen/auth_header_image_height"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -42,9 +39,8 @@
 
     <ScrollView
         android:id="@+id/signup_sub_activity"
-        android:layout_width="367dp"
-        android:layout_height="491dp"
-        android:layout_marginTop="100dp"
+        android:layout_width="347dp"
+        android:layout_height="402dp"
         android:layout_marginBottom="65dp"
         android:background="#373F50"
         android:scrollbars="vertical"
@@ -52,18 +48,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_signup"
-        app:layout_constraintVertical_bias="0.617">
+        app:layout_constraintVertical_bias="0.55">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:orientation="vertical">
 
             <RadioGroup
                 android:id="@+id/radioGroup"
-                android:layout_width="323dp"
-                android:layout_height="wrap_content"
+                android:layout_width="309dp"
+                android:layout_height="59dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +67,7 @@
 
                 <RadioButton
                     android:id="@+id/rb_client"
-                    android:layout_width="159dp"
+                    android:layout_width="156dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/drawable_type_tab_selector"
                     android:button="@null"
@@ -85,11 +80,11 @@
 
                 <RadioButton
                     android:id="@+id/rb_lawyer"
-                    android:layout_width="164dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="185dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:background="@drawable/drawable_type_tab_selector"
                     android:button="@null"
-                    android:ellipsize="none"
                     android:gravity="center"
                     android:text="@string/as_lawyer"
                     android:textColor="@drawable/drawable_type_tab_text_color_selector"
@@ -111,8 +106,7 @@
                     android:id="@+id/tie_fullName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="Name"
+                    android:hint="Enter your name"
                     android:inputType="text"
                     android:textSize="20sp"
                     android:visibility="visible"
@@ -133,8 +127,8 @@
                     android:id="@+id/tie_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="Email"
+                    android:hint="Enter your email"
+                    android:drawableStart="@android:drawable/sym_action_email"
                     android:inputType="textEmailAddress"
                     android:textSize="20sp"
                     android:visibility="visible"
@@ -155,8 +149,8 @@
                     android:id="@+id/tie_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="Password"
+                    android:hint="Enter your password"
+                    android:drawableStart="@android:drawable/ic_lock_idle_lock"
                     android:inputType="textPassword"
                     android:textSize="20sp"
                     android:visibility="visible"
@@ -177,8 +171,8 @@
                     android:id="@+id/tie_confirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="Confirm password"
+                    android:hint="retype your password"
+                    android:drawableStart="@android:drawable/ic_lock_idle_lock"
                     android:inputType="textPassword"
                     android:textSize="20sp"
                     android:visibility="visible"
@@ -189,7 +183,6 @@
                 android:id="@+id/til_phoneNumber"
                 android:layout_width="323dp"
                 android:layout_height="62dp"
-                android:gravity="center"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -200,8 +193,7 @@
                     android:id="@+id/tie_phoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint=" Phone number"
+                    android:hint="Enter your phone number"
                     android:inputType="phone"
                     android:textSize="20sp"
                     android:visibility="visible"
@@ -222,9 +214,29 @@
                     android:id="@+id/tie_licenseNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="License number"
+                    android:hint="Enter your license number"
                     android:inputType="number"
+                    android:textSize="20sp"
+                    android:visibility="gone"
+                    tools:visibility="gone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_specialization"
+                android:layout_width="323dp"
+                android:layout_height="62dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/til_licenseNumber"
+                tools:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tie_specialization"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter your specialization"
+                    android:inputType="text"
                     android:textSize="20sp"
                     android:visibility="gone"
                     tools:visibility="gone" />
@@ -244,7 +256,6 @@
                     android:id="@+id/tie_summary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:hint="Tell about yourself"
                     android:inputType="text"
                     android:textSize="20sp"
