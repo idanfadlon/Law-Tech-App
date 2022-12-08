@@ -40,7 +40,7 @@ class SplashActivity : AppCompatActivity() {
 //                    finish()
 //                }
 //                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-                startActivity(Intent(this@SplashActivity, LawyerMainActivity::class.java))
+                startActivity(Intent(this@SplashActivity, SignUpActivity::class.java))
                  finish()
 
             },

@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/client_navigation">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/client_navigation"
+    app:startDestination="@id/icon_menu_search">
 
+    <fragment
+        android:id="@+id/icon_menu_search"
+        android:name="com.example.law_tech_app.fragments.ClientSearchLawyerFragment"
+        android:label="Find a lawyer"
+        tools:layout="@layout/fragment_client_search_lawyer" />
+    <fragment
+        android:id="@+id/icon_menu_notifications"
+        android:name="com.example.law_tech_app.fragments.ClientNotificationsFragment"
+        android:label="Notifications"
+        tools:layout="@layout/fragment_client_notifications" />
+    <fragment
+        android:id="@+id/icon_menu_profile"
+        android:name="com.example.law_tech_app.fragments.ClientProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_client_profile" />
 </navigation>

@@ -3,7 +3,6 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'kotlin-android-extensions'
-
     id("androidx.navigation.safeargs.kotlin")
 }
 
@@ -37,6 +36,7 @@ android {
         jvmTarget = '1.8'
     }
     namespace 'com.example.law_tech_app'
+
 }
 
 dependencies {

@@ -16,5 +16,7 @@ class ClientNotificationsFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_client_notifications, container, false)
     }
-
+    override fun onResume() {
+        super.onResume()
+    }
 }

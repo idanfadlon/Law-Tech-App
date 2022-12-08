@@ -3,11 +3,15 @@ package com.example.law_tech_app.Firestore
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Parcelable
+import android.util.Log
+import com.example.law_tech_app.activities.SignUpActivity
 import com.example.law_tech_app.models.Client
 import com.example.law_tech_app.models.Lawyer
 import com.example.law_tech_app.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 //
 //import android.app.Activity
@@ -33,29 +37,28 @@ class FirestoreClass {
 //    /**
 //     * A function to make an entry of the registered user in the FireStore database.
 //     */
-//    fun registerUser(activity: RegisterActivity, userInfo: User) {
-//
-//        // The "users" is collection name. If the collection is already created then it will not create the same one again.
-//        mFireStore.collection(Constants.USERS)
-//            // Document ID for users fields. Here the document it is the User ID.
-//            .document(userInfo.id)
-//            // Here the userInfo are Field and the SetOption is set to merge. It is for if we wants to merge later on instead   replacing the fields.
-//            .set(userInfo, SetOptions.merge())
-//            .addOnSuccessListener {
-//
-//                // Here call a function of base activity for transferring the result to it.
-//                activity.userRegistrationSuccess()
-//            }
-//            .addOnFailureListener { e ->
-//                activity.hideProgressDialog()
-//                Log.e(
-//                    activity.javaClass.simpleName,
-//                    "Error while registering the user.",
-//                    e
-//                )
-//            }
-//    }
-//
+    fun registerLawyer(activity: SignUpActivity,LawyerInfo:Lawyer) {
+
+    // The "users" is collection name. If the collection is already created then it will not create the same one again.
+        mFireStore.collection(Constants.LAWYERS)
+            // Document ID for users fields. Here the document it is the User ID.
+            .document(LawyerInfo.uid)
+            // Here the userInfo are Field and the SetOption is set to merge. It is for if we wants to merge later on instead   replacing the fields.
+            .set(LawyerInfo,SetOptions.merge())
+            .addOnSuccessListener {
+                // Here call a function of base activity for transferring the result to it.
+                activity.lawyerSignUpSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while registering the user.",
+                    e
+                )
+            }
+    }
+    //
 //    /**
 //     * A function to get the user id of current logged user.
 //     */

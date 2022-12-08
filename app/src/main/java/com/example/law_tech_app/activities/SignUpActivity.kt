@@ -13,9 +13,12 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.TextView
+import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
+import com.example.law_tech_app.models.Lawyer
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.android.synthetic.main.activity_login.*
 
 
 class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
@@ -27,7 +30,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
     lateinit var tieLicenseNumber: TextInputEditText
     lateinit var tieSummary: TextInputEditText
     lateinit var btnSignUp:Button
-
+    var checkedId = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -42,6 +45,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
         }
         val radioGroup:RadioGroup = findViewById(R.id.radioGroup)
         radioGroup.setOnCheckedChangeListener{_,checkedId->
+            this.checkedId = checkedId
             onRadioClick(checkedId)
         }
         tieLicenseNumber=findViewById(R.id.tie_licenseNumber)
@@ -79,8 +83,14 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
 
     }
 
+
+    fun lawyerSignUpSuccess(){
+        hideProgressDialog()
+        showErrorSnackBar("Sign up successfully",false)
+    }
     private fun signUpUser(){
         if (validateSignUpDetails()){
+            showProgressDialog(resources.getString(R.string.loading))
             val email: String = tieEmail.text.toString().trim { it <= ' ' }
             val password: String = tiePassword.text.toString().trim { it <= ' ' }
 
@@ -88,18 +98,23 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
                     OnCompleteListener<AuthResult> { task ->
-
                         // If the registration is successfully done
                         if (task.isSuccessful) {
+                                // Firebase registered user
+                                val firebaseUser: FirebaseUser = task.result!!.user!!
+                                val lawyer = Lawyer(
+                                    firebaseUser.uid,
+                                    tieFullName.text.toString().trim{it <= ' '},
+                                    tieEmail.text.toString().trim {it <= ' '},
+                                    tieLicenseNumber.text.toString().trim {it <= ' '},
+                                    tiePhoneNumber.text.toString().trim {it <= ' '},
+                                    tieSummary.text.toString().trim {it <= ' '}
+                                )
+                                FirestoreClass().registerLawyer(this@SignUpActivity,lawyer)
 
-                            // Firebase registered user
-                            val firebaseUser: FirebaseUser = task.result!!.user!!
 
-                            showErrorSnackBar(
-                                "signup has been successfully completed",
-                                false
-                            )
                         } else {
+                            hideProgressDialog()
                             // If the registering is not successful then show error message.
                             showErrorSnackBar(task.exception!!.message.toString(), true)
                         }
