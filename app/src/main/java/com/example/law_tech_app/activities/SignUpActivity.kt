@@ -14,8 +14,11 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
+import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
+import com.example.law_tech_app.models.Lawyer
 import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -95,11 +98,18 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
         }
 
     }
-
+    fun lawyerSignUpSuccess(){
+        hideProgressDialog()
+        Toast.makeText(this,"Signup as lawyer has been successfully completed",Toast.LENGTH_SHORT).show()
+        val intent = Intent(this@SignUpActivity, LawyerMainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
     private fun signUpUser(){
         val radioChecked=findViewById<RadioButton>(R.id.rb_lawyer)
         if(radioChecked.isChecked) {
             if (validateLawyerSignUpDetails()) {
+                showProgressDialog(resources.getString(R.string.loading))
                 createUserFirebase()
             }
         }
@@ -172,7 +182,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
             }
 
             TextUtils.isEmpty(tieEmail.text.toString().trim { it <= ' ' }) -> {
-                showErrorSnackBar("Please enter full name", true)
+                showErrorSnackBar("Please enter email", true)
                 false
             }
             TextUtils.isEmpty(tiePassword.text.toString().trim { it <= ' ' }) -> {
@@ -236,10 +246,20 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                         // Firebase registered user
                         val firebaseUser: FirebaseUser = task.result!!.user!!
                         if (imLawyer) {
-                            Log.d("sLawyer","signup from lawyer option")
-                            showErrorSnackBar("signup as lawyer has been successfully completed", false)
+                            val lawyer = Lawyer(
+                                firebaseUser.uid,
+                                tieFullName.text.toString().trim{it <= ' '},
+                                tieEmail.text.toString().trim {it <= ' '},
+                                tieLicenseNumber.text.toString().trim {it <= ' '},
+                                tieSpecialization.text.toString().trim {it <= ' '},
+                                tiePhoneNumber.text.toString().trim {it <= ' '},
+                                tieSummary.text.toString().trim {it <= ' '}
+                            )
+                            FirestoreClass().registerLawyer(this@SignUpActivity,lawyer)
+
                         }
                         else{
+
                             Log.d("sClient","signup from client option")
                             showErrorSnackBar("signup as client has been successfully completed", false)
                         }
@@ -247,6 +267,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
 
 
                     } else {
+                        hideProgressDialog()
                         // If the registering is not successful then show error message.
                         showErrorSnackBar(task.exception!!.message.toString(), true)
                     }

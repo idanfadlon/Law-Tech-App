@@ -4,4 +4,8 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class Client ():Parcelable
+class Client ():Parcelable{
+    override fun toString(): String {
+        return "Client"
+    }
+}

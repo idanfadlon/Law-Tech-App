@@ -55,11 +55,7 @@ class LawyerMainActivity : BaseActivity() {
 
     }
 
-//    private fun replaceFragment(fragment: Fragment){
-//        val transaction = supportFragmentManager.beginTransaction()
-//        transaction.replace(R.id.fragmentContainer_lawyer_container,fragment)
-//        transaction.commit()
-//    }
+
 
 }
 

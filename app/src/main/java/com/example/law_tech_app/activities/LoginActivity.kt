@@ -4,16 +4,23 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.TextUtils
+import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
+import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
+import com.example.law_tech_app.models.Client
+import com.example.law_tech_app.models.Lawyer
+import com.example.law_tech_app.utils.Constants
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 
 class LoginActivity: BaseActivity() {
@@ -59,7 +66,7 @@ class LoginActivity: BaseActivity() {
         tvRegister = findViewById(R.id.tv_login_register)
         tvRegister.setOnClickListener{
             //TODO: add navigate to register screen
-            Toast.makeText(this,"clicked",Toast.LENGTH_SHORT).show()
+            onBackPressed()
         }
 
     }
@@ -88,6 +95,14 @@ private fun onRadioClick(id:Int){
             }
         }
     }
+    fun userLoggedInSuccess(currentUser: Any) {
+        hideProgressDialog()
+        when(currentUser){
+            is Lawyer -> startActivity(Intent(this@LoginActivity,LawyerMainActivity::class.java))
+            is Client -> startActivity(Intent(this@LoginActivity,ClientMainActivity::class.java))
+        }
+        finish()
+    }
     private fun logInRegisteredUser() {
 
         if (validateLoginDetails()) {
@@ -103,12 +118,12 @@ private fun onRadioClick(id:Int){
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        hideProgressDialog()
-                        val intent = Intent(this@LoginActivity, LawyerMainActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                        //TODO try to figure out how to check the user type
+//                     FirestoreClass().getCurrentUserDetails(this@LoginActivity,Constants.LAWYERS)
+//                        }else{
+//                            FirestoreClass().getCurrentUserDetails(this@LoginActivity,Constants.CLIENTS)
+//                        }
 
-//                        FirestoreClass().getUserDetails(this@LoginActivity)
                     } else {
                         // Hide the progress dialog
                         hideProgressDialog()
