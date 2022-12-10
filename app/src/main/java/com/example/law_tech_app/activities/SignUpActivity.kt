@@ -241,12 +241,12 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
     private fun createUserFirebase(){
         val email: String = tieEmail.text.toString().trim { it <= ' ' }
         val password: String = tiePassword.text.toString().trim { it <= ' ' }
-        Log.d("register123456789","enter func")
+       // Log.d("register123456789","enter func")
         val imLawyer:Boolean = tieLicenseNumber.isVisible
 
 
         // Create an instance and create a register a user with email and password.
-        Log.d("firebase","im in line 198")
+      //  Log.d("firebase","im in line 198")
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{ task: Task<AuthResult> ->
             // If the registration is successfully done
                     if (task.isSuccessful) {
