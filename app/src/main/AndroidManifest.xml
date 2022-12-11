@@ -31,6 +31,10 @@
             >
         </activity>
         <activity
+            android:name=".activities.ClientMainActivity"
+            >
+        </activity>
+        <activity
             android:name=".activities.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.LawTechApp.NoActionBar"

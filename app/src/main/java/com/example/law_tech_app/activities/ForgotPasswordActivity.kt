@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.Toast
 
 import com.example.law_tech_app.R
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
 class ForgotPasswordActivity : BaseActivity() {
@@ -28,7 +29,8 @@ class ForgotPasswordActivity : BaseActivity() {
         }
         btnSubmit = findViewById(R.id.btn_forgotpassword_submit)
         btnSubmit.setOnClickListener{
-            val email:String = findViewById<View?>(R.id.tie_forgotpassword_email).toString().trim{it<=' '}
+            val tie_password:TextInputEditText = findViewById(R.id.tie_forgotpassword_email)
+            val email:String = tie_password.text.toString().trim { it<=' '}
             if(email.isEmpty())
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_email),true)
             else{

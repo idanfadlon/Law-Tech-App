@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
 import com.example.law_tech_app.activities.LoginActivity
 import com.example.law_tech_app.activities.SignUpActivity
 import com.example.law_tech_app.models.Client
@@ -12,6 +13,7 @@ import com.example.law_tech_app.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 
 
@@ -22,6 +24,7 @@ class FirestoreClass {
 
     // Access a Cloud Firestore instance.
     private val mFireStore = Firebase.firestore
+
 //
 //    /**
 //     * A function to make an entry of the registered user in the FireStore database.
@@ -65,35 +68,42 @@ class FirestoreClass {
 //    /**
 //     * A function to get the logged user details from from FireStore Database.
 //     */
-    fun getCurrentUserDetails(activity: Activity,collectionName :String) {
+    fun getCurrentUserDetails(activity: Activity,collectionName :String,uid:String) {
 
         // Here we pass the collection name from which we wants the data.
         mFireStore.collection(collectionName)
             // The document id to get the Fields of user.
-            .document(getCurrentUserID())
+            .document(uid)
             .get()
             .addOnSuccessListener { document ->
-
                 // Here we have received the document snapshot which is converted into the User Data model object.
-               val currentUser = if (collectionName == Constants.LAWYERS) {
-                    document.toObject(Lawyer::class.java)!!
-                }else{
-                    document.toObject(Client::class.java)!!
+                val currentUser:Any?
+                currentUser = if (document.exists())
+                {
+                    when (collectionName) {
+                        Constants.LAWYERS -> {
+                            document.toObject(Lawyer::class.java)!!
+                        }
+                        else -> {
+                            document.toObject(Client::class.java)!!
+                        }
+                    }
+                }else {
+                    null
                 }
+//                val sharedPreferences =
+//                    activity.getSharedPreferences(
+//                        Constants.LAWTECH_PREFERENCES,
+//                        Context.MODE_PRIVATE
+//                    )
+//                // Create an instance of the editor which is help us to edit the SharedPreference.
+//                val editor: SharedPreferences.Editor = sharedPreferences.edit()
+//                 editor.putString(
+//                     Constants.CURRENT_USERNAME,
+//                     "$currentUser"
+//                    )
 
-                val sharedPreferences =
-                    activity.getSharedPreferences(
-                        Constants.LAWTECH_PREFERENCES,
-                        Context.MODE_PRIVATE
-                    )
-                // Create an instance of the editor which is help us to edit the SharedPreference.
-                val editor: SharedPreferences.Editor = sharedPreferences.edit()
-                 editor.putString(
-                     Constants.CURRENT_USERNAME,
-                     "$currentUser"
-                    )
-
-                editor.apply()
+//                editor.apply()
 
                 when (activity) {
                     is LoginActivity -> {

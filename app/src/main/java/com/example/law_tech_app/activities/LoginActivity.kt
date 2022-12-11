@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.get
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
 import com.example.law_tech_app.models.Client
@@ -21,6 +22,8 @@ import com.example.law_tech_app.utils.Constants
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login.view.*
 
 
 class LoginActivity: BaseActivity() {
@@ -29,6 +32,8 @@ class LoginActivity: BaseActivity() {
     lateinit var login_btn:Button
     lateinit var forgotPasswordTv:TextView
     lateinit var tvRegister:TextView
+    lateinit var radioGroup:RadioGroup
+
 
 
 
@@ -45,7 +50,7 @@ class LoginActivity: BaseActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
-        val radioGroup:RadioGroup = findViewById(R.id.radioGroup)
+        radioGroup = findViewById(R.id.radioGroup)
         radioGroup.setOnCheckedChangeListener{_, checkedId ->
            onRadioClick(checkedId)
         }
@@ -79,6 +84,9 @@ private fun onRadioClick(id:Int){
 
     }
     }
+//    fun checkCurrentUserType(uid:String):Boolean{
+//        FirestoreClass().mFireStore.collection(Constants.LAWYERS).document(uid)
+//    }
 
     private fun validateLoginDetails(): Boolean {
         return when {
@@ -95,13 +103,28 @@ private fun onRadioClick(id:Int){
             }
         }
     }
-    fun userLoggedInSuccess(currentUser: Any) {
-        hideProgressDialog()
-        when(currentUser){
-            is Lawyer -> startActivity(Intent(this@LoginActivity,LawyerMainActivity::class.java))
-            is Client -> startActivity(Intent(this@LoginActivity,ClientMainActivity::class.java))
+    fun userLoggedInSuccess(currentUser: Any?) {
+
+        if (currentUser != null)
+        {
+            when (currentUser) {
+                is Lawyer -> {
+                    hideProgressDialog()
+                    startActivity(Intent(this@LoginActivity, LawyerMainActivity::class.java))
+                    finish()
+                }
+                is Client -> {
+                    hideProgressDialog()
+                    startActivity(Intent(this@LoginActivity, ClientMainActivity::class.java))
+                    finish()
+                }
+            }
+        }else {
+            hideProgressDialog()
+            showErrorSnackBar("The chosen type is not corresponding the registered user type !", true)
+            FirebaseAuth.getInstance().signOut()
         }
-        finish()
+
     }
     private fun logInRegisteredUser() {
 
@@ -118,11 +141,18 @@ private fun onRadioClick(id:Int){
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        //TODO try to figure out how to check the user type
-//                     FirestoreClass().getCurrentUserDetails(this@LoginActivity,Constants.LAWYERS)
-//                        }else{
-//                            FirestoreClass().getCurrentUserDetails(this@LoginActivity,Constants.CLIENTS)
-//                        }
+                        val currentUserID = FirebaseAuth.getInstance().currentUser!!.uid
+                        when (this.radioGroup.checkedRadioButtonId) {
+                            R.id.rb_lawyer -> {
+                                FirestoreClass().getCurrentUserDetails(this@LoginActivity,Constants.LAWYERS,currentUserID)
+                            }
+                            R.id.rb_client -> {
+                                FirestoreClass().getCurrentUserDetails(this@LoginActivity,Constants.CLIENTS,currentUserID)
+                            }
+                            else -> {
+                                showErrorSnackBar("Error while singing in",true)
+                            }
+                        }
 
                     } else {
                         // Hide the progress dialog

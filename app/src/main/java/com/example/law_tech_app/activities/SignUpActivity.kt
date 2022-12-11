@@ -115,6 +115,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
         }
         else {
                 if (validateClientSignUpDetails()) {
+                    showProgressDialog(resources.getString(R.string.loading))
                     createUserFirebase()
                 }
         }
@@ -156,7 +157,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                     false
                 }
                 //TODO:fix this also in lawyer validation
-                tiePassword.text.toString().contains("[A-Za-z0-9!\"#$%&'()*+,-./:;\\\\<=>?@\\[\\]^_`{|}~]".toRegex()) ->{
+                !(tiePassword.text.toString().contains("[A-Za-z0-9!\"#$%&'()*+,-./:;\\\\<=>?@\\[\\]^_`{|}~]".toRegex())) ->{
                     Log.d("passnv","pass not valid")
                     showErrorSnackBar("password must include characters numbers and symbols",true)
                     false
@@ -220,7 +221,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                 showErrorSnackBar("passwords are not matched",true)
                 false
             }
-            !tiePassword.text.toString().contains("[A-Za-z0-9!\"#$%&'()*+,-./:;\\\\<=>?@\\[\\]^_`{|}~]".toRegex()) ->{
+            !(tiePassword.text.toString().contains("[A-Za-z0-9!\"#$%&'()*+,-./:;\\\\<=>?@\\[\\]^_`{|}~]".toRegex())) ->{
                 Log.d("pass","pass not valid")
                 showErrorSnackBar("password must include characters numbers and symbols",true)
                 false

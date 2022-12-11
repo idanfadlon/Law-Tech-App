@@ -21,10 +21,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="@dimen/auth_logo_width_size"
-            android:layout_height="@dimen/auth_logo_height_size"
+            android:layout_width="280dp"
+            android:layout_height="134dp"
             android:layout_gravity="center"
-            android:src="@drawable/logo_transparent"/>
+            android:src="@drawable/logo_transparent" />
     </FrameLayout>
 
     <TextView
@@ -45,6 +45,7 @@
         android:id="@+id/login_sub_activity"
         android:layout_width="347dp"
         android:layout_height="402dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="65dp"
         android:background="#373F50"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -71,7 +72,7 @@
             android:id="@+id/radioGroup"
             android:layout_width="309dp"
             android:layout_height="59dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
