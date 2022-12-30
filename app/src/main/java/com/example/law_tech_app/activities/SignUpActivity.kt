@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
+import com.example.law_tech_app.models.Client
 import com.example.law_tech_app.models.Lawyer
 import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputEditText
@@ -102,6 +103,15 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
         hideProgressDialog()
         Toast.makeText(this,"Signup as lawyer has been successfully completed",Toast.LENGTH_SHORT).show()
         val intent = Intent(this@SignUpActivity, LawyerMainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+    fun clientSignUpSuccess() {
+        hideProgressDialog()
+        showErrorSnackBar("Signup as client has been successfully completed", false)
+        Toast.makeText(this, "Signup as client has been successfully completed", Toast.LENGTH_SHORT)
+            .show()
+        val intent = Intent(this@SignUpActivity, ClientMainActivity::class.java)
         startActivity(intent)
         finish()
     }
@@ -240,8 +250,6 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
         // Create an instance and create a register a user with email and password.
         Log.d("firebase","im in line 198")
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{ task: Task<AuthResult> ->
-                    Log.d("task1","im in line 200")
-
             // If the registration is successfully done
                     if (task.isSuccessful) {
                         // Firebase registered user
@@ -260,9 +268,15 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
 
                         }
                         else{
-
+//                            val  client = Client(
+//                                firebaseUser.uid,
+//                                tieFullName.text.toString().trim{it <= ' '},
+//                                tieEmail.text.toString().trim {it <= ' '},
+//                                tiePhoneNumber.text.toString().trim {it <= ' '}
+//                            )
+//                            FirestoreClass().registerClient(this@SignUpActivity,client)
                             Log.d("sClient","signup from client option")
-                            showErrorSnackBar("signup as client has been successfully completed", false)
+
                         }
 
 

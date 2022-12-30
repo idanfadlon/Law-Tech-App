@@ -18,7 +18,7 @@ class Lawyer (val uid:String ="",
               val blockedClients: ArrayList<String> = ArrayList(),
               val messages : ArrayList<Message> = ArrayList()
 
-):Parcelable
+):User(),Parcelable
 {
     override fun toString(): String {
         return "Lawyer"

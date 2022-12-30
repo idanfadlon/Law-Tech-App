@@ -34,9 +34,6 @@ class LoginActivity: BaseActivity() {
     lateinit var tvRegister:TextView
     lateinit var radioGroup:RadioGroup
 
-
-
-
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +70,6 @@ class LoginActivity: BaseActivity() {
             //TODO: add navigate to register screen
             onBackPressed()
         }
-
     }
 
 private fun onRadioClick(id:Int){
@@ -81,7 +77,6 @@ private fun onRadioClick(id:Int){
         tie_email.hint = "Email"
     else {
         tie_email.hint = "License Number"
-
     }
     }
 //    fun checkCurrentUserType(uid:String):Boolean{
@@ -106,7 +101,6 @@ private fun onRadioClick(id:Int){
     fun userLoggedInSuccess(currentUser: Any?) {
 
         if (currentUser != null)
-        {
             when (currentUser) {
                 is Lawyer -> {
                     hideProgressDialog()
@@ -118,8 +112,7 @@ private fun onRadioClick(id:Int){
                     startActivity(Intent(this@LoginActivity, ClientMainActivity::class.java))
                     finish()
                 }
-            }
-        }else {
+            } else {
             hideProgressDialog()
             showErrorSnackBar("The chosen type is not corresponding the registered user type !", true)
             FirebaseAuth.getInstance().signOut()
