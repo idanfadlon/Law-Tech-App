@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.law_tech_app.R
 
-class ClientNotificationsFragment : Fragment() {
+class ClientNotificationsFragment :Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

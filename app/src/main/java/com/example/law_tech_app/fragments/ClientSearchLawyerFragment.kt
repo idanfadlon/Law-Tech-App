@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.example.law_tech_app.R
 
 
-class ClientSearchLawyerFragment : Fragment() {
+class ClientSearchLawyerFragment :Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

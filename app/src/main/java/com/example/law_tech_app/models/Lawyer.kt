@@ -7,21 +7,22 @@ import kotlinx.android.parcel.Parcelize
 import java.util.Objects
 
 @Parcelize
-class Lawyer (val uid:String ="",
-              val fullName:String = "",
-              val email:String = "",
-              val licenseNumber:String = "",
-              val specialization :String = "",
-              val phoneNumber:String = "",
-              val aboutMe:String = "",
-              val imageURL:String = "",
-              val blockedClients: ArrayList<String> = ArrayList(),
-              val messages : ArrayList<Message> = ArrayList()
+class Lawyer (
+    override val uid:String ="",
+    val fullName:String = "",
+    val email:String = "",
+    val licenseNumber:String = "",
+    val specialization :String = "",
+    val phoneNumber:String = "",
+    val aboutMe:String = "",
+    val imageURL:String = "",
+    val blockedClients: ArrayList<String> = ArrayList(),
+    val messages : ArrayList<Message> = ArrayList()
 
 ):User(),Parcelable
 {
     override fun toString(): String {
-        return "Lawyer"
+        return "lawyers"
     }
 }
 

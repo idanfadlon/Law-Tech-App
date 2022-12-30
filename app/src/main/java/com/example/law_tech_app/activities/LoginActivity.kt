@@ -18,6 +18,7 @@ import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
 import com.example.law_tech_app.models.Client
 import com.example.law_tech_app.models.Lawyer
+import com.example.law_tech_app.models.User
 import com.example.law_tech_app.utils.Constants
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -68,7 +69,7 @@ class LoginActivity: BaseActivity() {
         tvRegister = findViewById(R.id.tv_login_register)
         tvRegister.setOnClickListener{
             //TODO: add navigate to register screen
-            onBackPressed()
+            startActivity(Intent(this@LoginActivity,SignUpActivity::class.java))
         }
     }
 
@@ -98,26 +99,33 @@ private fun onRadioClick(id:Int){
             }
         }
     }
-    fun userLoggedInSuccess(currentUser: Any?) {
+    fun userLoggedInSuccess(currentUser:User?)
+    {
 
         if (currentUser != null)
-            when (currentUser) {
-                is Lawyer -> {
+        {
+
+            when(currentUser.toString())
+            {
+                Constants.LAWYERS -> {
                     hideProgressDialog()
                     startActivity(Intent(this@LoginActivity, LawyerMainActivity::class.java))
                     finish()
                 }
-                is Client -> {
+                else -> {
                     hideProgressDialog()
                     startActivity(Intent(this@LoginActivity, ClientMainActivity::class.java))
                     finish()
                 }
-            } else {
+            }
+
+        }
+        else
+        {
             hideProgressDialog()
             showErrorSnackBar("The chosen type is not corresponding the registered user type !", true)
             FirebaseAuth.getInstance().signOut()
         }
-
     }
     private fun logInRegisteredUser() {
 

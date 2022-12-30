@@ -9,6 +9,7 @@ import com.example.law_tech_app.activities.LoginActivity
 import com.example.law_tech_app.activities.SignUpActivity
 import com.example.law_tech_app.models.Client
 import com.example.law_tech_app.models.Lawyer
+import com.example.law_tech_app.models.User
 import com.example.law_tech_app.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
@@ -29,17 +30,20 @@ class FirestoreClass {
 //    /**
 //     * A function to make an entry of the registered user in the FireStore database.
 //     */
-    fun registerLawyer(activity: SignUpActivity,LawyerInfo:Lawyer) {
+    fun registerUser(activity: SignUpActivity,UserInfo: User) {
 
     // The "users" is collection name. If the collection is already created then it will not create the same one again.
-        mFireStore.collection(Constants.LAWYERS)
+        mFireStore.collection(UserInfo.toString())
             // Document ID for users fields. Here the document it is the User ID.
-            .document(LawyerInfo.uid)
+            .document(UserInfo.uid)
             // Here the userInfo are Field and the SetOption is set to merge. It is for if we wants to merge later on instead   replacing the fields.
-            .set(LawyerInfo,SetOptions.merge())
+            .set(UserInfo,SetOptions.merge())
             .addOnSuccessListener {
                 // Here call a function of base activity for transferring the result to it.
-                activity.lawyerSignUpSuccess()
+              if (UserInfo.toString() == Constants.LAWYERS)
+                  activity.lawyerSignUpSuccess()
+                else activity.clientSignUpSuccess()
+
             }
             .addOnFailureListener { e ->
                 activity.hideProgressDialog()
@@ -77,8 +81,7 @@ class FirestoreClass {
             .get()
             .addOnSuccessListener { document ->
                 // Here we have received the document snapshot which is converted into the User Data model object.
-                val currentUser:Any?
-                currentUser = if (document.exists())
+                val currentUser:User? = if (document.exists())
                 {
                     when (collectionName) {
                         Constants.LAWYERS -> {

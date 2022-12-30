@@ -66,8 +66,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
         btnSignUp.setOnClickListener { this.signUpUser() }
         val tvAlready:TextView=findViewById(R.id.tv_already)
         tvAlready.setOnClickListener{
-            val intent =Intent(this@SignUpActivity,com.example.law_tech_app.activities.LoginActivity::class.java)
-            startActivity(intent)
+            onBackPressed()
         }
 
     }
@@ -108,7 +107,6 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
     }
     fun clientSignUpSuccess() {
         hideProgressDialog()
-        showErrorSnackBar("Signup as client has been successfully completed", false)
         Toast.makeText(this, "Signup as client has been successfully completed", Toast.LENGTH_SHORT)
             .show()
         val intent = Intent(this@SignUpActivity, ClientMainActivity::class.java)
@@ -264,22 +262,20 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                                 tiePhoneNumber.text.toString().trim {it <= ' '},
                                 tieSummary.text.toString().trim {it <= ' '}
                             )
-                            FirestoreClass().registerLawyer(this@SignUpActivity,lawyer)
+                            FirestoreClass().registerUser(this@SignUpActivity,lawyer)
 
                         }
                         else{
-//                            val  client = Client(
-//                                firebaseUser.uid,
-//                                tieFullName.text.toString().trim{it <= ' '},
-//                                tieEmail.text.toString().trim {it <= ' '},
-//                                tiePhoneNumber.text.toString().trim {it <= ' '}
-//                            )
-//                            FirestoreClass().registerClient(this@SignUpActivity,client)
+                            val  client = Client(
+                                firebaseUser.uid,
+                                tieFullName.text.toString().trim{it <= ' '},
+                                tieEmail.text.toString().trim {it <= ' '},
+                                tiePhoneNumber.text.toString().trim {it <= ' '}
+                            )
+                            FirestoreClass().registerUser(this@SignUpActivity,client)
                             Log.d("sClient","signup from client option")
 
                         }
-
-
 
                     } else {
                         hideProgressDialog()

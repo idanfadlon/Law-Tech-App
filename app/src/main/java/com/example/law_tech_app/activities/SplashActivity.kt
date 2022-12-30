@@ -9,6 +9,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import com.example.law_tech_app.R
 import com.example.law_tech_app.activities.SignUpActivity
+import com.example.law_tech_app.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 
 class SplashActivity : AppCompatActivity() {
@@ -32,8 +33,16 @@ class SplashActivity : AppCompatActivity() {
         Handler().postDelayed(
             {
                 if(mAuth.currentUser !=null) {
-                    startActivity(Intent(this@SplashActivity, LawyerMainActivity::class.java))
-                    finish()
+                    when(mAuth.currentUser.toString()){
+                        Constants.LAWYERS ->{
+                            startActivity(Intent(this@SplashActivity, LawyerMainActivity::class.java))
+                            finish()
+                        }
+                        else->{
+                            startActivity(Intent(this@SplashActivity, ClientMainActivity::class.java))
+                            finish()
+                        }
+                    }
                 }else{
                     startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
                     finish()
