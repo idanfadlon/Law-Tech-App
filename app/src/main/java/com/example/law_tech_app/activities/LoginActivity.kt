@@ -4,16 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.TextUtils
-import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.view.get
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
 import com.example.law_tech_app.models.Client
@@ -22,7 +18,6 @@ import com.example.law_tech_app.models.User
 import com.example.law_tech_app.utils.Constants
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.view.*
 
@@ -109,12 +104,16 @@ private fun onRadioClick(id:Int){
             {
                 Constants.LAWYERS -> {
                     hideProgressDialog()
-                    startActivity(Intent(this@LoginActivity, LawyerMainActivity::class.java))
+                    val intent = Intent(this@LoginActivity, LawyerMainActivity::class.java)
+                    intent.putExtra(Constants.CURRENT_EXTRA_USER_DETAILS, currentUser as Lawyer)
+                    startActivity(intent)
                     finish()
                 }
                 else -> {
                     hideProgressDialog()
-                    startActivity(Intent(this@LoginActivity, ClientMainActivity::class.java))
+                    val intent = Intent(this@LoginActivity, ClientMainActivity::class.java)
+                    intent.putExtra(Constants.CURRENT_EXTRA_USER_DETAILS, currentUser as Client)
+                    startActivity(intent)
                     finish()
                 }
             }

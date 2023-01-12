@@ -14,5 +14,8 @@
     <string name="email_sent"><b>Email sent successfully !</b></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit"><u><b>Edit</b></u></string>
+    <string name="yes"><b>Yes</b></string>
+    <string name="no"><b>No</b></string>
 
 </resources>

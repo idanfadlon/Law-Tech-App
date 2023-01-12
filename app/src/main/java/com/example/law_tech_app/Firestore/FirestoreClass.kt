@@ -3,19 +3,28 @@ package com.example.law_tech_app.Firestore
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.example.law_tech_app.activities.LawyerMainActivity
 import com.example.law_tech_app.activities.LoginActivity
 import com.example.law_tech_app.activities.SignUpActivity
+import com.example.law_tech_app.fragments.BaseFragment
+import com.example.law_tech_app.fragments.ClientNotificationsFragment
+import com.example.law_tech_app.fragments.LawyerNotificationsFragment
+import com.example.law_tech_app.fragments.LawyerProfileFragment
 import com.example.law_tech_app.models.Client
 import com.example.law_tech_app.models.Lawyer
 import com.example.law_tech_app.models.User
 import com.example.law_tech_app.utils.Constants
+import com.example.law_tech_app.utils.GlideLoader
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_forgot_password.*
+import kotlinx.android.synthetic.main.activity_main_lawyer.*
+import kotlinx.android.synthetic.main.fragment_lawyer_profile.view.*
 
 
 ///**
@@ -24,7 +33,7 @@ import com.google.firebase.ktx.Firebase
 class FirestoreClass {
 
     // Access a Cloud Firestore instance.
-    private val mFireStore = Firebase.firestore
+     val mFireStore = Firebase.firestore
 
 //
 //    /**
@@ -72,7 +81,7 @@ class FirestoreClass {
 //    /**
 //     * A function to get the logged user details from from FireStore Database.
 //     */
-    fun getCurrentUserDetails(activity: Activity,collectionName :String,uid:String) {
+    fun getCurrentUserDetails(activity: Activity, collectionName:String, uid:String, fragment: Fragment? = null) {
 
         // Here we pass the collection name from which we wants the data.
         mFireStore.collection(collectionName)
@@ -94,32 +103,48 @@ class FirestoreClass {
                 }else {
                     null
                 }
-//                val sharedPreferences =
-//                    activity.getSharedPreferences(
-//                        Constants.LAWTECH_PREFERENCES,
-//                        Context.MODE_PRIVATE
-//                    )
-//                // Create an instance of the editor which is help us to edit the SharedPreference.
-//                val editor: SharedPreferences.Editor = sharedPreferences.edit()
-//                 editor.putString(
-//                     Constants.CURRENT_USERNAME,
-//                     "$currentUser"
-//                    )
-
-//                editor.apply()
-
-                when (activity) {
-                    is LoginActivity -> {
-                        // Call a function of base activity for transferring the result to it.
+                when(activity)
+                {
+                    is LoginActivity->
+                    {
+                        val sharedPreferences =
+                            activity.getSharedPreferences(
+                                Constants.LAWTECH_PREFERENCES,
+                                Context.MODE_PRIVATE
+                            )
+                        // Create an instance of the editor which is help us to edit the SharedPreference.
+                        val editor
+                                : SharedPreferences.Editor = sharedPreferences.edit()
+                        if (currentUser != null) {
+                            editor.putString(
+                                Constants.CURRENT_USERNAME,
+                                currentUser.fullName
+                            )
+                        }
+                        editor.apply()
                         activity.userLoggedInSuccess(currentUser)
                     }
+                    is LawyerMainActivity->{
+                        if (fragment != null && (fragment is LawyerProfileFragment)){
+                            fragment.loadUserDetails(currentUser as Lawyer)
+                        }
+                        if (fragment !=null && (fragment is LawyerNotificationsFragment)){
+                            fragment.loadingMessagesSuccess((currentUser as Lawyer).messages)
+                        }
+                    }
                 }
+
             }
             .addOnFailureListener { e ->
                 // Hide the progress dialog if there is any error. And print the error in log.
                 when (activity) {
                     is LoginActivity -> {
                         activity.hideProgressDialog()
+                    }
+                    is LawyerMainActivity->{
+                        if (fragment != null && fragment is BaseFragment){
+                            fragment.hideProgressDialog()
+                        }
                     }
                 }
 
@@ -130,4 +155,16 @@ class FirestoreClass {
                 )
             }
    }
+
+    fun updateCurrentUserDetails(currentUserHashMap:HashMap<String,Any>,collection:String){
+        mFireStore.collection(collection)
+            .document(getCurrentUserID()).update(currentUserHashMap)
+            .addOnSuccessListener {
+
+            }.addOnFailureListener{
+
+            }
+
+
+    }
 }

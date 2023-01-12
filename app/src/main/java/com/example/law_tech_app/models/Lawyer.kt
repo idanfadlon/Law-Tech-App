@@ -7,13 +7,13 @@ import kotlinx.android.parcel.Parcelize
 import java.util.Objects
 
 @Parcelize
-class Lawyer (
+open class Lawyer (
     override val uid:String ="",
-    val fullName:String = "",
-    val email:String = "",
+    override val fullName:String = "",
+    override val email:String = "",
     val licenseNumber:String = "",
     val specialization :String = "",
-    val phoneNumber:String = "",
+    override val phoneNumber:String = "",
     val aboutMe:String = "",
     val imageURL:String = "",
     val blockedClients: ArrayList<String> = ArrayList(),
@@ -21,9 +21,11 @@ class Lawyer (
 
 ):User(),Parcelable
 {
+    //represent the collection this object belong to
     override fun toString(): String {
         return "lawyers"
     }
+
 }
 
 
