@@ -10,6 +10,7 @@ import com.example.law_tech_app.R
 
 class ClientSearchLawyerFragment :Fragment() {
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
