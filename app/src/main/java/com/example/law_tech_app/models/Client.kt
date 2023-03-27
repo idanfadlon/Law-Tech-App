@@ -14,4 +14,8 @@ open class Client (
     override fun toString(): String {
         return "clients"
     }
+
+    override fun describeContents(): Int {
+        TODO("Not yet implemented")
+    }
 }

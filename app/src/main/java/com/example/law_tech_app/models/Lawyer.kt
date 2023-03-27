@@ -26,6 +26,10 @@ open class Lawyer (
         return "lawyers"
     }
 
+    override fun describeContents(): Int {
+        TODO("Not yet implemented")
+    }
+
 }
 
 

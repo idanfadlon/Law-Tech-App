@@ -26,6 +26,6 @@ object Constants {
     const val BLOCKED_CLIENTS = "blockedClients"
     const val IMAGE_REQUEST_CODE = 1
     const val IMAGE_UPLOAD_CODE = 2
-
+    const val EXTRA_EVENT_DETAILS ="extra_meeting_details"
 
 }

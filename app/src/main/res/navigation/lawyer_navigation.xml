@@ -8,7 +8,8 @@
         android:id="@+id/icon_menu_calendar"
         android:name="com.example.law_tech_app.fragments.LawyerCalendarFragment"
         android:label="Calendar"
-        tools:layout="@layout/fragment_lawyer_calendar" />
+        tools:layout="@layout/fragment_lawyer_calendar"
+        />
     <fragment
         android:id="@+id/icon_menu_notifications"
         android:name="com.example.law_tech_app.fragments.LawyerNotificationsFragment"

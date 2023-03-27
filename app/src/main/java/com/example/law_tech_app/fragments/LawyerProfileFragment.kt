@@ -1,21 +1,31 @@
 package com.example.law_tech_app.fragments
 
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.ActivityResultRegistry
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toBitmapOrNull
+import androidx.core.view.drawToBitmap
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
+import com.example.law_tech_app.activities.AddEventActivity
 import com.example.law_tech_app.activities.BaseActivity
 import com.example.law_tech_app.activities.LoginActivity
 import com.example.law_tech_app.models.Lawyer
@@ -23,6 +33,12 @@ import com.example.law_tech_app.utils.Constants
 import com.example.law_tech_app.utils.GlideLoader
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.fragment_lawyer_profile.*
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.util.Calendar
 
 /*
 check how to refresh the fragment in order to see immediately changing picture
@@ -36,20 +52,28 @@ open class LawyerProfileFragment : BaseFragment() {
     private lateinit var tieSpecial: TextInputEditText
     private lateinit var tiePhone: TextInputEditText
     private lateinit var tieAbout: TextInputEditText
-    private lateinit var logoutBtn :Button
-    private lateinit var save :Button
+    private lateinit var logoutBtn :ImageButton
+    private lateinit var save :ImageButton
     private lateinit var cameraBtn: ImageButton
     private lateinit var cameraUpload: ImageButton
-      lateinit var imageView: ImageView
-     private lateinit var editTV: TextView
-     private var isEditable:Boolean = false
+    lateinit var imageView: ImageView
+    private var isEditable:Boolean = false
+    private var isImageCaptured:Boolean = false
+    private lateinit var cameraLauncher : ActivityResultLauncher<Void?>
+    private lateinit var imageBitmap:Bitmap
 
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val fragView = inflater.inflate(R.layout.fragment_lawyer_profile, container, false)
-        imageView = fragView.findViewById(R.id.iv_messageDetailsActivity_sender)
+        imageView = fragView.findViewById(R.id.iv_profileFragment_lawyer)
         imageView.adjustViewBounds = true
         tieFullName = fragView.findViewById(R.id.tie_lawyerFragment_Fullname)
         tieEmail = fragView.findViewById(R.id.tie_lawyerFragment_Email)
@@ -57,30 +81,62 @@ open class LawyerProfileFragment : BaseFragment() {
         tieSpecial = fragView.findViewById(R.id.tie_lawyerFragment_Speical)
         tiePhone = fragView.findViewById(R.id.tie_lawyerFragment_Phone)
         tieAbout = fragView.findViewById(R.id.tie_lawyerFragment_About)
-        logoutBtn = fragView.findViewById(R.id.btn_lawyer_profileFragment)
+        logoutBtn = fragView.findViewById(R.id.ib_lawyerFragment_logout)
         logoutBtn.setOnClickListener {
             showAlertDialog("Logout","Are you sure you want to logout ?")
         }
         cameraBtn = fragView.findViewById(R.id.btn_lawyerFragment_Camera)
         cameraBtn.setOnClickListener {
-            //TODO implement the camera opening
-            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            this.activity?.startActivityForResult(cameraIntent,Constants.IMAGE_REQUEST_CODE)
+            cameraLauncher.launch(null)
         }
         cameraUpload = fragView.findViewById(R.id.btn_lawyerFragment_upload)
         cameraUpload.setOnClickListener {
             GlideLoader(requireActivity()).showImageChoosingActivity(activity as BaseActivity)
         }
-        save = fragView.findViewById(R.id.btn_profileFragment_save)
+        save = fragView.findViewById(R.id.ib_lawyerFragment_save)
         save.setOnClickListener {
             this.showProgressDialog(resources.getString(R.string.loading))
             updateCurrentUserDetails()
         }
-        editTV = fragView.findViewById(R.id.tv_profileFragment_edit)
-        editTV.setOnClickListener {
-            enableEditing()
-        }
+
+        cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview(),
+        ActivityResultCallback {
+            bitmap->
+            if(bitmap != null)
+            {
+
+                imageBitmap = bitmap
+                imageView.setImageBitmap(bitmap)
+                isImageCaptured = true
+            }
+
+        })
+        this.showProgressDialog(resources.getString(R.string.loading))
+        FirestoreClass().getCurrentUserDetails(requireActivity(),Constants.LAWYERS,
+            FirestoreClass().getCurrentUserID(),this@LawyerProfileFragment)
+
         return fragView
+    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.lawyer_fragment_menu_profile,menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        when(id) {
+            R.id.icon_edit_profile->{
+                enableEditing()
+                val icon = item
+                if(isEditable){
+                    icon.setIcon(R.drawable.check)
+                }else{
+                    icon.setIcon(R.drawable.edit_profile)
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
     private fun showAlertDialog(title:String, message:String){
         val dialogBuilder = AlertDialog.Builder(activity)
@@ -101,6 +157,7 @@ open class LawyerProfileFragment : BaseFragment() {
         val alertDialog = dialogBuilder.create()
         alertDialog.show()
     }
+
     private fun enableEditing(){
         if(!isEditable) {
             isEditable = true
@@ -109,6 +166,8 @@ open class LawyerProfileFragment : BaseFragment() {
             tiePhone.isEnabled = true
             tieAbout.isEnabled = true
             save.isEnabled = true
+            cameraUpload.isEnabled = true
+            cameraBtn.isEnabled = true
         }else{
             isEditable = false
             tieLicense.isEnabled = false
@@ -116,6 +175,8 @@ open class LawyerProfileFragment : BaseFragment() {
             tiePhone.isEnabled = false
             tieAbout.isEnabled = false
             save.isEnabled = false
+            cameraUpload.isEnabled = false
+            cameraBtn.isEnabled = false
         }
     }
     fun loadUserDetails(currentUser:Lawyer){
@@ -133,25 +194,53 @@ open class LawyerProfileFragment : BaseFragment() {
         tieAbout.setText(currentUser.aboutMe)
         tieAbout.isEnabled = false
         save.isEnabled = false
+        cameraBtn.isEnabled = false
+        cameraUpload.isEnabled = false
         this.hideProgressDialog()
-    }
 
+
+    }
     override fun onResume() {
         super.onResume()
-        Log.e("check","inside onResume")
-        this.showProgressDialog(resources.getString(R.string.loading))
-        FirestoreClass().getCurrentUserDetails(requireActivity(),Constants.LAWYERS,
-            FirestoreClass().getCurrentUserID(),this@LawyerProfileFragment)
+
     }
     private fun updateCurrentUserDetails(){
-        if (isEditable && validateUpdatingDetails()){
+        if (validateUpdatingDetails())
+        {
+            val currentUserHashMap = HashMap<String,Any>()
+            if (isImageCaptured) {
+                try {
+                    val baos = ByteArrayOutputStream()
+                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+                    val data = baos.toByteArray()
+                    val sref: StorageReference =
+                        FirebaseStorage.getInstance().reference.child("Image " + FirestoreClass().getCurrentUserID() + ".jpeg")
+                    sref.putBytes(data).addOnSuccessListener { taskSnapshot ->
+                        taskSnapshot.metadata!!.reference!!.downloadUrl.addOnSuccessListener { url ->
+                            currentUserHashMap[Constants.IMAGE_URL] = url.toString()
+                            FirestoreClass().updateCurrentUserDetails(
+                                currentUserHashMap,
+                                Constants.LAWYERS
+                            )
 
-            val userHashMap :HashMap<String,Any> = HashMap()
-            userHashMap[Constants.LICENSE_NUMBER] = tieLicense.text.toString().trim {it <= ' '}
-            userHashMap[Constants.SPECIALIZATION] = tieSpecial.text.toString().trim {it <= ' '}
-            userHashMap[Constants.PHONE_NUMBER] = tiePhone.text.toString().trim {it <= ' '}
-            userHashMap[Constants.ABOUT_ME] = tieAbout.text.toString().trim {it <= ' '}
-            FirestoreClass().updateCurrentUserDetails(userHashMap,Constants.LAWYERS)
+                        }
+                    }
+
+
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    Log.e("matan", "error")
+                }
+            }
+            isImageCaptured = false
+            currentUserHashMap[Constants.LICENSE_NUMBER] = tieLicense.text.toString().trim {it <= ' '}
+            currentUserHashMap[Constants.SPECIALIZATION] = tieSpecial.text.toString().trim {it <= ' '}
+            currentUserHashMap[Constants.PHONE_NUMBER] = tiePhone.text.toString().trim {it <= ' '}
+            currentUserHashMap[Constants.ABOUT_ME] = tieAbout.text.toString().trim {it <= ' '}
+            FirestoreClass().updateCurrentUserDetails(
+                currentUserHashMap,
+                Constants.LAWYERS
+            )
             updateCurrentUserDetailsSuccess()
         }
     }
@@ -162,6 +251,7 @@ open class LawyerProfileFragment : BaseFragment() {
         tiePhone.isEnabled = false
         tieAbout.isEnabled = false
         save.isEnabled = false
+
         this.hideProgressDialog()
         Toast.makeText(activity,"Updating details has been successfully completed",Toast.LENGTH_LONG).show()
     }

@@ -63,11 +63,12 @@ class LawyerMainActivity : BaseActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.P)
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == RESULT_OK) {
+        if(resultCode == RESULT_OK)
+        {
             if (requestCode == Constants.IMAGE_UPLOAD_CODE) {
                 if (data != null) {
                     try {
@@ -83,6 +84,7 @@ class LawyerMainActivity : BaseActivity() {
                                     Constants.LAWYERS
                                 )
 
+
                             }
                         }
 
@@ -92,9 +94,9 @@ class LawyerMainActivity : BaseActivity() {
 
                 }
             }else if(requestCode == Constants.IMAGE_REQUEST_CODE){
-                if (data !=null && data.extras !=null)
+                if (data !=null)
                 {
-                   //TODO figure out how to set the profile picture
+                    Log.e("matan", data.data.toString())
                 }
             }
         }

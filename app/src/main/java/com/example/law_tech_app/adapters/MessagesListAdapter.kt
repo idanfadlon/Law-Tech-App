@@ -2,15 +2,14 @@ package com.example.law_tech_app.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Typeface
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
 import com.example.law_tech_app.activities.MessageDetailsActivity
 import com.example.law_tech_app.models.Message
@@ -21,7 +20,8 @@ import kotlinx.android.synthetic.main.messages_lawyer_list.view.*
 class MessagesListAdapter(
     val context:Context,
     var messagesList:ArrayList<Message>
-):RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+):RecyclerView.Adapter<RecyclerView.ViewHolder>()
+{
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MyViewHolder(
             LayoutInflater.from(context).inflate(R.layout.messages_lawyer_list,
@@ -30,9 +30,11 @@ class MessagesListAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int)
+    {
         val model = messagesList[position]
-        if (holder is MyViewHolder){
+        if (holder is MyViewHolder)
+        {
             if(model.senderImageURL != ""){
             GlideLoader(context).loadSenderPicture(model.senderImageURL,holder.itemView.iv_sender_image)
             }else{
@@ -41,9 +43,9 @@ class MessagesListAdapter(
             if (model.isReaden){
                holder.itemView.tv_messageDetailsActivity_subject.text = " Subject:" + " " + model.subject
                 holder.itemView.tv_messageDetailsActivity_sender.text = " Sender:" + " " + model.sender
-                holder.itemView.tv_messageDetailsActivity_status.text = " Status:" + " "
+                holder.itemView.tv_messageDetailsActivity_status.text = " Status:" + ""
                 val image:ImageView = holder.itemView.iv_icon_readen
-                image.setImageResource(R.drawable.ic_baseline_mark_email_read_24)
+                image.setImageResource(R.drawable.messagereaden)
             }else{
                 val subject:TextView =  holder.itemView.tv_messageDetailsActivity_subject
                 subject.text = " Subject:" + " " + model.subject
@@ -55,7 +57,7 @@ class MessagesListAdapter(
                 status.text = " Status:" + ""
                 status.setTypeface(status.typeface,Typeface.BOLD)
                 val image:ImageView = holder.itemView.iv_icon_readen
-                image.setImageResource(R.drawable.ic_baseline_mark_email_unread_24)
+                image.setImageResource(R.drawable.message_incoming)
             }
             holder.itemView.setOnClickListener{
                 //TODO implement the message as readen
@@ -63,7 +65,6 @@ class MessagesListAdapter(
                 intent.putExtra(Constants.EXTRA_MESSAGE_DETAILS,model)
                 context.startActivity(intent)
             }
-
         }
     }
 
