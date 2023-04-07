@@ -10,6 +10,9 @@ import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -32,7 +35,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
     lateinit var tieConfirmPassword: TextInputEditText
     lateinit var tiePhoneNumber: TextInputEditText
     lateinit var tieLicenseNumber: TextInputEditText
-    lateinit var tieSpecialization: TextInputEditText
+    lateinit var actvSpecialization: AutoCompleteTextView
     lateinit var tieSummary: TextInputEditText
     lateinit var btnSignUp: Button
     lateinit var mAuth:FirebaseAuth
@@ -59,7 +62,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
         tieConfirmPassword=findViewById(R.id.tie_confirmPassword)
         tiePhoneNumber=findViewById(R.id.tie_phoneNumber)
         tieLicenseNumber=findViewById(R.id.tie_licenseNumber)
-        tieSpecialization =findViewById(R.id.tie_specialization)
+        actvSpecialization =findViewById(R.id.actv_specialization)
         tieSummary=findViewById(R.id.tie_summary)
         btnSignUp=findViewById(R.id.btn_signup)
         mAuth =FirebaseAuth.getInstance()
@@ -76,12 +79,20 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
             val tilLicenseNumber=findViewById<TextInputLayout>(R.id.til_licenseNumber)
             val tilSummary=findViewById<TextInputLayout>(R.id.til_summary)
             val tilSpecialization=findViewById<TextInputLayout>(R.id.til_specialization)
+            val specializations = listOf("Real Estate", "Insurance Law", "Family Law", "High tech", "Tax laws", "Insolvencies and banking", "Litigation", "White Collar", "Criminal", "Administrative law", "Constitutional Law", "Medical Malpractice", "Labor and Employment Law", "Intellectual Property", "Privacy and data protection", "Corporate and commercial")
+            val adapter = ArrayAdapter(this, R.layout.specialization_item, specializations)
+            actvSpecialization.setAdapter(adapter)
+            actvSpecialization.onItemClickListener = AdapterView.OnItemClickListener {
+                adapterView, view, i ,l ->
+                val specializationSeleceted = adapterView.getItemAtPosition(i)
+                actvSpecialization.setText(specializationSeleceted.toString())
+            }
             tilLicenseNumber.visibility=View.VISIBLE
             tieLicenseNumber.visibility=View.VISIBLE
             tilSummary.visibility=View.VISIBLE
             tieSummary.visibility=View.VISIBLE
             tilSpecialization.visibility=View.VISIBLE
-            tieSpecialization.visibility=View.VISIBLE
+            actvSpecialization.visibility=View.VISIBLE
 
         }
         else{
@@ -93,7 +104,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
             tilSummary.visibility=View.GONE
             tieSummary.visibility=View.GONE
             tilSpecialization.visibility=View.GONE
-            tieSpecialization.visibility=View.GONE
+            actvSpecialization.visibility=View.GONE
 
         }
 
@@ -172,7 +183,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                 }
 
                 else -> {
-                    Log.d("passnv","im on else")
+
                     true
                 }
             }
@@ -185,7 +196,6 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                 false
             }
             tieFullName.text.toString().length<2->{
-                Log.d("fName","name not valid")
                 showErrorSnackBar("name must include at last 2 characters",true)
                 false
             }
@@ -212,7 +222,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                 false
             }
 
-            TextUtils.isEmpty(tieSpecialization.text.toString().trim { it<=' ' })->{
+            TextUtils.isEmpty(actvSpecialization.text.toString().trim { it<=' ' })->{
                 showErrorSnackBar("Please enter specialization",true)
                 false
             }
@@ -230,7 +240,6 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                 false
             }
             !(tiePassword.text.toString().contains("[A-Za-z0-9!\"#$%&'()*+,-./:;\\\\<=>?@\\[\\]^_`{|}~]".toRegex())) ->{
-                Log.d("pass","pass not valid")
                 showErrorSnackBar("password must include characters numbers and symbols",true)
                 false
             }
@@ -241,12 +250,10 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
     private fun createUserFirebase(){
         val email: String = tieEmail.text.toString().trim { it <= ' ' }
         val password: String = tiePassword.text.toString().trim { it <= ' ' }
-       // Log.d("register123456789","enter func")
         val imLawyer:Boolean = tieLicenseNumber.isVisible
 
 
         // Create an instance and create a register a user with email and password.
-      //  Log.d("firebase","im in line 198")
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{ task: Task<AuthResult> ->
             // If the registration is successfully done
                     if (task.isSuccessful) {
@@ -258,7 +265,7 @@ class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
                                 tieFullName.text.toString().trim{it <= ' '},
                                 tieEmail.text.toString().trim {it <= ' '},
                                 tieLicenseNumber.text.toString().trim {it <= ' '},
-                                tieSpecialization.text.toString().trim {it <= ' '},
+                                actvSpecialization.text.toString().trim {it <= ' '},
                                 tiePhoneNumber.text.toString().trim {it <= ' '},
                                 tieSummary.text.toString().trim {it <= ' '}
                             )
