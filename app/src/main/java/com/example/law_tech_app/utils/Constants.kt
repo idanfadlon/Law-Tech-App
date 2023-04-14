@@ -8,6 +8,7 @@ object Constants {
     const val LAWYERS:String = "lawyers"
     const val CLIENTS:String = "clients"
     const val MESSAGES:String = "messages"
+    const val EVENTS:String = "events"
     //------------------------------------
 
     const val LAWTECH_PREFERENCES = "law_tech_prefs"
@@ -26,6 +27,7 @@ object Constants {
     const val BLOCKED_CLIENTS = "blockedClients"
     const val IMAGE_REQUEST_CODE = 1
     const val IMAGE_UPLOAD_CODE = 2
-    const val EXTRA_EVENT_DETAILS ="extra_meeting_details"
-
+    const val EXTRA_EVENT_DETAILS ="extra_event_details"
+    const val RECEIVER = "receiver"
+    const val IS_EVENT_ADDED = "is_event_added"
 }

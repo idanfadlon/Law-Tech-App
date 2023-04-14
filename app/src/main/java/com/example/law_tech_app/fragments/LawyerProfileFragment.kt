@@ -1,31 +1,20 @@
 package com.example.law_tech_app.fragments
 
-import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.*
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toBitmapOrNull
-import androidx.core.view.drawToBitmap
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
-import com.example.law_tech_app.activities.AddEventActivity
 import com.example.law_tech_app.activities.BaseActivity
 import com.example.law_tech_app.activities.LoginActivity
 import com.example.law_tech_app.models.Lawyer
@@ -35,10 +24,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.fragment_lawyer_profile.*
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.util.Calendar
 
 /*
 check how to refresh the fragment in order to see immediately changing picture
@@ -61,7 +48,7 @@ open class LawyerProfileFragment : BaseFragment() {
     private var isImageCaptured:Boolean = false
     private lateinit var cameraLauncher : ActivityResultLauncher<Void?>
     private lateinit var imageBitmap:Bitmap
-
+    private lateinit var icon:MenuItem
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +60,7 @@ open class LawyerProfileFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val fragView = inflater.inflate(R.layout.fragment_lawyer_profile, container, false)
-        imageView = fragView.findViewById(R.id.iv_profileFragment_lawyer)
+        imageView = fragView.findViewById(R.id.iv_messageDetails_img)
         imageView.adjustViewBounds = true
         tieFullName = fragView.findViewById(R.id.tie_lawyerFragment_Fullname)
         tieEmail = fragView.findViewById(R.id.tie_lawyerFragment_Email)
@@ -95,7 +82,6 @@ open class LawyerProfileFragment : BaseFragment() {
         }
         save = fragView.findViewById(R.id.ib_lawyerFragment_save)
         save.setOnClickListener {
-            this.showProgressDialog(resources.getString(R.string.loading))
             updateCurrentUserDetails()
         }
 
@@ -127,7 +113,7 @@ open class LawyerProfileFragment : BaseFragment() {
         when(id) {
             R.id.icon_edit_profile->{
                 enableEditing()
-                val icon = item
+                 icon = item
                 if(isEditable){
                     icon.setIcon(R.drawable.check)
                 }else{
@@ -143,7 +129,7 @@ open class LawyerProfileFragment : BaseFragment() {
         dialogBuilder.setTitle(title)
         dialogBuilder.setMessage(message)
         dialogBuilder.setCancelable(false)
-        dialogBuilder.setIcon(R.drawable.ic_baseline_warning_24)
+        dialogBuilder.setIcon(R.drawable.warning)
         dialogBuilder.setPositiveButton(R.string.yes){
                 _, _ ->
             FirebaseAuth.getInstance().signOut()
@@ -207,6 +193,7 @@ open class LawyerProfileFragment : BaseFragment() {
     private fun updateCurrentUserDetails(){
         if (validateUpdatingDetails())
         {
+            showProgressDialog(resources.getString(R.string.loading))
             val currentUserHashMap = HashMap<String,Any>()
             if (isImageCaptured) {
                 try {
@@ -220,7 +207,8 @@ open class LawyerProfileFragment : BaseFragment() {
                             currentUserHashMap[Constants.IMAGE_URL] = url.toString()
                             FirestoreClass().updateCurrentUserDetails(
                                 currentUserHashMap,
-                                Constants.LAWYERS
+                                Constants.LAWYERS,
+                                this
                             )
 
                         }
@@ -239,45 +227,46 @@ open class LawyerProfileFragment : BaseFragment() {
             currentUserHashMap[Constants.ABOUT_ME] = tieAbout.text.toString().trim {it <= ' '}
             FirestoreClass().updateCurrentUserDetails(
                 currentUserHashMap,
-                Constants.LAWYERS
+                Constants.LAWYERS,
+                this
             )
-            updateCurrentUserDetailsSuccess()
+
         }
     }
-    private fun updateCurrentUserDetailsSuccess(){
+     fun updateCurrentUserDetailsSuccess(){
         isEditable = false
         tieLicense.isEnabled = false
         tieSpecial.isEnabled = false
         tiePhone.isEnabled = false
         tieAbout.isEnabled = false
         save.isEnabled = false
-
-        this.hideProgressDialog()
-        Toast.makeText(activity,"Updating details has been successfully completed",Toast.LENGTH_LONG).show()
+        icon.setIcon(R.drawable.edit_profile)
+        hideProgressDialog()
+        showErrorSnackBar("Updating details has been successfully completed",false)
     }
     private fun validateUpdatingDetails():Boolean{
         return when {
             TextUtils.isEmpty(tiePhone.text.toString().trim { it <= ' ' }) -> {
                 this.hideProgressDialog()
-                Toast.makeText(this.activity,"Please enter phone number",Toast.LENGTH_LONG).show()
+                showErrorSnackBar("Please enter phone number",true)
                 false
             }
 
             TextUtils.isEmpty(tieLicense.text.toString().trim { it<=' ' })->{
                 this.hideProgressDialog()
-                Toast.makeText(this.activity,"Please enter license number",Toast.LENGTH_LONG).show()
+                showErrorSnackBar("Please enter license number",true)
                 false
             }
 
             TextUtils.isEmpty(tieSpecial.text.toString().trim { it<=' ' })->{
                 this.hideProgressDialog()
-                Toast.makeText(this.activity,"Please enter specialization",Toast.LENGTH_LONG).show()
+                showErrorSnackBar("Please enter specialization",true)
                 false
             }
 
             TextUtils.isEmpty(tieAbout.text.toString().trim(){ it<=' '})->{
                 this.hideProgressDialog()
-                Toast.makeText(this.activity,"Please tell a little about yourself",Toast.LENGTH_LONG).show()
+                showErrorSnackBar("Please tell a little about yourself",true)
                 false
             }
 

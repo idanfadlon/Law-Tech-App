@@ -17,9 +17,15 @@ import java.io.IOException
 class GlideLoader(val context: Context) {
 
     fun loadCurrentUserPicture(imageURL:String,image:ImageView){
-        Glide.with(context).load(imageURL).centerCrop()
-            .placeholder(R.drawable.imageprofile)
-            .into(image)
+        if(imageURL != "") {
+            Glide.with(context).load(imageURL).centerCrop()
+                .placeholder(R.drawable.imageprofile)
+                .into(image)
+        }else{
+            Glide.with(context).load(R.drawable.ic_launcher_round).centerCrop()
+                .placeholder(R.drawable.imageprofile)
+                .into(image)
+        }
     }
     fun loadSenderPicture(image: Any, imageView: ImageView) {
         if(image != "")

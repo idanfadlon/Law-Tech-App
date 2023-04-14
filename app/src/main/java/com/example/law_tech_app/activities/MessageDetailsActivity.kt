@@ -1,7 +1,8 @@
 package com.example.law_tech_app.activities
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.law_tech_app.R
@@ -14,6 +15,8 @@ class MessageDetailsActivity : BaseActivity() {
     lateinit var subject:TextView
     lateinit var sender:TextView
     lateinit var description:TextView
+    lateinit var reply:TextView
+    lateinit var replyBtn:ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,20 +24,28 @@ class MessageDetailsActivity : BaseActivity() {
         if (intent.hasExtra(Constants.EXTRA_MESSAGE_DETAILS)){
             currentMessage = intent.extras?.get(Constants.EXTRA_MESSAGE_DETAILS)!! as com.example.law_tech_app.models.Message
         }
-        senderImage = findViewById(R.id.iv_profileFragment_lawyer)
+        senderImage = findViewById(R.id.iv_messageDetails_img)
         subject = findViewById(R.id.tv_messageDetailsActivity_subject)
         sender = findViewById(R.id.tv_messageDetailsActivity_sender)
-        description = findViewById(R.id.tv_messageDetailsActivity_status)
-
+        description = findViewById(R.id.tv_messageDetailsActivity_time)
+        reply = findViewById(R.id.tv_messageDetailsActivity_reply)
+        replyBtn = findViewById(R.id.ib_messageDetailsActivity_reply)
+        replyBtn.setOnClickListener {
+            val intent = Intent(this,AddMessageActivity::class.java)
+            intent.putExtra(Constants.EXTRA_MESSAGE_DETAILS,currentMessage)
+            startActivity(intent)
+        }
         loadCurrentMessageDetails()
     }
-    @SuppressLint("SetTextI18n")
-    fun loadCurrentMessageDetails(){
+
+
+    private fun loadCurrentMessageDetails(){
         this.showProgressDialog(resources.getString(R.string.loading))
         GlideLoader(this).loadCurrentUserPicture(currentMessage.senderImageURL,senderImage)
         subject.text =subject.text.toString() + " " +currentMessage.subject
-        sender.text =sender.text.toString() + " " +currentMessage.sender
-        description.text = description.text.toString() +" "+ currentMessage.body
+        sender.text =sender.text.toString() + " " +currentMessage.senderFullname
+        description.text = description.text.toString() +" "+ currentMessage.messageBody
+        reply.text = "Reply to " + currentMessage.senderFullname
         hideProgressDialog()
     }
     override fun onResume() {

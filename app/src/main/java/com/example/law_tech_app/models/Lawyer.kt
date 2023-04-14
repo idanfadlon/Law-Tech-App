@@ -15,9 +15,9 @@ open class Lawyer (
     val specialization :String = "",
     override val phoneNumber:String = "",
     val aboutMe:String = "",
-    val imageURL:String = "",
+    override val imageURL:String = "",
     val blockedClients: ArrayList<String> = ArrayList(),
-    val messages : ArrayList<Message> = ArrayList()
+    val availabilityTime:ArrayList<Double> = ArrayList()
 
 ):User(),Parcelable
 {

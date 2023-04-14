@@ -9,7 +9,7 @@
     <CalendarView
         android:id="@+id/calendar_lawyerFragment"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:alwaysDrawnWithCache="false"
         android:animateLayoutChanges="false"
         android:animationCache="false"
@@ -39,14 +39,26 @@
         android:id="@+id/tv_lawyerFragment_meetings_noEvents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="No events to show"
+        android:layout_marginTop="16dp"
+        android:text="No events found"
         android:textColor="@color/primary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendar_lawyerFragment" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fb_lawyerFragment_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="80dp"
+        android:clickable="true"
+        android:src="@drawable/ic_baseline_add_24"
+        app:backgroundTint="@color/yellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

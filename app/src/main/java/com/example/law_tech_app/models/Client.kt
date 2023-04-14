@@ -8,7 +8,7 @@ open class Client (
     override val fullName:String = "",
     override val email:String = "",
     override val phoneNumber:String = "",
-    val imageURL:String = "",
+    override val imageURL:String = "",
     val messages : ArrayList<Message> = ArrayList()
 ):User(),Parcelable{
     override fun toString(): String {
