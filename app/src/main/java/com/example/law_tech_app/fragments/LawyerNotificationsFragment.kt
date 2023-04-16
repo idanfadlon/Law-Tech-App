@@ -1,16 +1,14 @@
 package com.example.law_tech_app.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
-import com.example.law_tech_app.adapters.MessagesListAdapter
+import com.example.law_tech_app.adapters.MessagesListClientAdapter
 import com.example.law_tech_app.models.Message
 import com.example.law_tech_app.utils.Constants
 import kotlinx.android.synthetic.main.fragment_lawyer_notifications.*
@@ -53,10 +51,10 @@ class LawyerNotificationsFragment :BaseFragment() {
             tv_lawyer_notifications_noFound.visibility = View.GONE
             rv_lawyer_notifications.layoutManager = LinearLayoutManager(activity)
             rv_lawyer_notifications.setHasFixedSize(true)
-            val messagesListAdapter = MessagesListAdapter(requireActivity(),messages)
+            val messagesListClientAdapter = MessagesListClientAdapter(requireActivity(),messages)
             val dividerItemDecoration = DividerItemDecoration(rv_lawyer_notifications.context,LinearLayoutManager.VERTICAL)
             rv_lawyer_notifications.addItemDecoration(dividerItemDecoration)
-            rv_lawyer_notifications.adapter = messagesListAdapter
+            rv_lawyer_notifications.adapter = messagesListClientAdapter
         }else{
             rv_lawyer_notifications.visibility = View.GONE
             tv_lawyer_notifications_noFound.visibility = View.VISIBLE

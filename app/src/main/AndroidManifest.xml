@@ -6,9 +6,6 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -40,12 +37,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.LawyerMainActivity"></activity>
-        <activity android:name=".activities.ClientMainActivity"></activity>
+        <activity
+            android:name=".activities.ClientMainActivity"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
         <activity
             android:name=".activities.LoginActivity"
             android:exported="true"
             android:screenOrientation="fullSensor"
-            android:theme="@style/Theme.LawTechApp.NoActionBar"></activity>
+            android:theme="@style/Theme.LawTechApp.NoActionBar" />
         <activity
             android:name=".activities.ForgotPasswordActivity"
             android:exported="true"
