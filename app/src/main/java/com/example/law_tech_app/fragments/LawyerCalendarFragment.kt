@@ -1,26 +1,19 @@
 package com.example.law_tech_app.fragments
 
 import android.content.Intent
-import android.hardware.ConsumerIrManager.CarrierFrequencyRange
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.CalendarView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Priority
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
 import com.example.law_tech_app.activities.AddEventActivity
 import com.example.law_tech_app.adapters.EventListAdapter
 import com.example.law_tech_app.models.Event
-import com.example.law_tech_app.models.EventType
-import com.example.law_tech_app.models.Frequency
 import com.example.law_tech_app.utils.Constants
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_lawyer_calendar.*
-import java.sql.Time
-import java.time.DayOfWeek
 import java.util.Calendar
 
 class LawyerCalendarFragment :BaseFragment() {
@@ -37,16 +30,23 @@ class LawyerCalendarFragment :BaseFragment() {
         val fragView = inflater.inflate(R.layout.fragment_lawyer_calendar, container, false)
         calendar = fragView.findViewById(R.id.calendar_lawyerFragment)
         calendar.setOnDateChangeListener{ calendar,year,month,day->
-            //TODO must add +1 to month
-                currentCalendarDay = day
-                currentCalendarMonth = month + 1
-            FirestoreClass().getEventsFromFirestore(this,day,month+1)
+            currentCalendarDay = day
+            currentCalendarMonth = month + 1
+            FirestoreClass().getEventsFromFirestore(this, day, month + 1)
+//            if (selectedCalendarDateInRange(year, month+1, day)) {
+//                addEvent.isEnabled = true
+//                currentCalendarDay = day
+//                currentCalendarMonth = month + 1
+//                FirestoreClass().getEventsFromFirestore(this, day, month + 1)
+//            }
+//            else{
+//                addEvent.isEnabled  = false
+//            }
 //            val calendar = Calendar.getInstance()
 //            calendar.set(year,month,day)
 //            Log.e("matan",calendar.get(Calendar.WEEK_OF_MONTH).toString())
 
         }
-
 
         currentCalendarMonth = (Calendar.getInstance().get(Calendar.MONTH))+1
         currentCalendarDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
@@ -62,12 +62,17 @@ class LawyerCalendarFragment :BaseFragment() {
         }
         return fragView
     }
+    private fun selectedCalendarDateInRange(year:Int, month:Int, day:Int) : Boolean{
+        val totalSelected = (year*360) + (month*30) + day
+        val totalCurrent = ((Calendar.getInstance().get(Calendar.YEAR))*360) +
+                (((Calendar.getInstance().get(Calendar.MONTH))+1)*30) + Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        Log.e("matan",(totalSelected - totalCurrent).toString())
+        return ((totalSelected - totalCurrent) <= 14 && (totalSelected - totalCurrent) >= 0)
+
+    }
     fun deleteEventSuccess(){
         hideProgressDialog()
         showErrorSnackBar("Event was successfully canceled !",false)
-    }
-    fun addEventSuccess(){
-        showErrorSnackBar("Event was successfully added !",false)
     }
     fun updateEventSuccess(){
         hideProgressDialog()

@@ -17,8 +17,5 @@ open class Message(
     val date:String,
     var isReaden:Boolean
 ):Parcelable{
-    constructor() : this("", "", "","matan ohayon","",
-    "","", Calendar.getInstance().time.toString(),false)
-
-
+    constructor() : this("","","","","","","","",false)
 }

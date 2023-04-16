@@ -3,6 +3,7 @@ package com.example.law_tech_app.adapters
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
 import com.example.law_tech_app.fragments.BaseFragment
+import com.example.law_tech_app.models.Client
 import com.example.law_tech_app.models.Lawyer
 import com.example.law_tech_app.models.Message
 import com.example.law_tech_app.models.User
@@ -17,6 +19,7 @@ import com.example.law_tech_app.utils.Constants
 import com.example.law_tech_app.utils.GlideLoader
 import kotlinx.android.synthetic.main.dialog_message_details.*
 import kotlinx.android.synthetic.main.dialog_send_message.*
+import kotlinx.android.synthetic.main.dialog_user_profile_details.*
 import kotlinx.android.synthetic.main.messages_lawyer_list.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,6 +35,7 @@ class MessagesListAdapter(
 {
     lateinit var messageDetailsDialog:Dialog
     lateinit var sendMessageDialog:Dialog
+    lateinit var userProfileDialog: Dialog
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MyViewHolder(
@@ -59,6 +63,10 @@ class MessagesListAdapter(
             }
             holder.itemView.iv_icon_delete.setOnClickListener {
                 showDeleteAlertDialog("Delete Message","Are you sure you want to delete this message ?",message.id,position)
+            }
+            holder.itemView.iv_sender_image.setOnClickListener {
+                fragment.showProgressDialog("Loading..")
+                FirestoreClass().getUserFromFirestore(message.senderUID,Constants.CLIENTS,this)
             }
 
         }
@@ -90,7 +98,7 @@ class MessagesListAdapter(
         dialogBuilder.setPositiveButton(R.string.yes){
                 _, _ ->
             fragment.showProgressDialog("Loading..")
-            messageDetailsDialog.dismiss()
+            userProfileDialog.dismiss()
             val currentUserBlockedList = (currentUser as Lawyer).blockedClients
             currentUserBlockedList.add(id)
             val hashMap = HashMap<String,Any>()
@@ -112,6 +120,24 @@ class MessagesListAdapter(
         alertDialog.show()
     }
 
+    fun createUserProfileDialog(user: User){
+
+        userProfileDialog = Dialog(context)
+        userProfileDialog.setContentView(R.layout.dialog_user_profile_details)
+        GlideLoader(userProfileDialog.context).loadCurrentUserPicture(user!!.imageURL,userProfileDialog.iv_user_profile_details_img)
+        userProfileDialog.tv_user_profile_details_fullname.text = userProfileDialog.tv_user_profile_details_fullname.text.toString() + " " + user!!.fullName
+        userProfileDialog.tv_user_profile_details_email.text =  userProfileDialog.tv_user_profile_details_email.text.toString() + " " + user!!.email
+        userProfileDialog.tv_user_profile_details_phone.text = userProfileDialog.tv_user_profile_details_phone.text.toString() + " " + user!!.phoneNumber
+        userProfileDialog.tv_user_profile_details_block.text = userProfileDialog.tv_user_profile_details_block.text.toString() + " " + user.fullName
+        userProfileDialog.ib_user_profile_details_block.setOnClickListener {
+        showBlockAlertDialog("Block User","Are you sure you want to block " + user!!.fullName +" ?\n\n" +
+        "* Blocking " + user!!.fullName + " will remove all notifications he sent to you *", user!!.uid) }
+        userProfileDialog.setCancelable(true)
+        userProfileDialog.setCanceledOnTouchOutside(true)
+        fragment.hideProgressDialog()
+        userProfileDialog.show()
+
+    }
     private fun createMessageDetailsDialog(message:Message){
         messageDetailsDialog = Dialog(context)
         messageDetailsDialog.setContentView(R.layout.dialog_message_details)
@@ -119,15 +145,16 @@ class MessagesListAdapter(
         messageDetailsDialog.tv_dialog_messageDetails_sender.text =messageDetailsDialog.tv_dialog_messageDetails_sender.text.toString() + " " + message.senderFullname
         messageDetailsDialog.tv_dialog_messageDetails_body.text = messageDetailsDialog.tv_dialog_messageDetails_body.text.toString() + " " + message.messageBody
         messageDetailsDialog.tv_dialog_messageDetails_reply.text = messageDetailsDialog.tv_dialog_messageDetails_reply.text.toString() + " " + message.senderFullname
-        messageDetailsDialog.tv_dialog_messageDetails_block.text = messageDetailsDialog.tv_dialog_messageDetails_block.text.toString() + " " + message.senderFullname
+        messageDetailsDialog.tv_dialog_messageDetails_watch.text = "Watch " + message.senderFullname + "'s profile"
         GlideLoader(messageDetailsDialog.context).loadCurrentUserPicture(message.senderImageURL,messageDetailsDialog.iv_messageDetails_img)
         messageDetailsDialog.ib_dialog_messageDetails_reply.setOnClickListener {
             messageDetailsDialog.dismiss()
             createSendMessageDialog(message)
         }
-        messageDetailsDialog.ib_dialog_messageDetails_block.setOnClickListener {
-            showBlockAlertDialog("Block User","Are you sure you want to block " + message.senderFullname +" ?\n\n" +
-                    "* Blocking " + message.senderFullname + " will remove all notifications he sent to you *",message.senderUID)
+        messageDetailsDialog.ib_dialog_messageDetails_watch.setOnClickListener {
+            messageDetailsDialog.dismiss()
+            fragment.showProgressDialog("Loading..")
+            FirestoreClass().getUserFromFirestore(message.senderUID,Constants.CLIENTS,this)
         }
         messageDetailsDialog.setCancelable(true)
         messageDetailsDialog.setCanceledOnTouchOutside(true)

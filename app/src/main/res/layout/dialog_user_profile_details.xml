@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
-    android:layout_height="530dp">
+    android:layout_height="450dp">
+
 
     <FrameLayout
         android:id="@+id/frameLayout2"
@@ -23,7 +23,7 @@
             android:background="#FFFFFF" />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_messageDetails_img"
+            android:id="@+id/iv_user_profile_details_img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="false"
@@ -46,86 +46,60 @@
         app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
 
         <TextView
-            android:id="@+id/tv_dialog_messageDetails_subject"
+            android:id="@+id/tv_user_profile_details_fullname"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginLeft="5dp"
             android:background="@drawable/messages_list_shape"
-            android:text=" Subject :"
+            android:text=" Full name :"
             android:textColor="@color/primary"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_dialog_messageDetails_sender"
+            android:id="@+id/tv_user_profile_details_email"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/messages_list_shape"
-            android:text=" Sender :"
+            android:text=" Email :"
             android:textColor="@color/primary"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_dialog_messageDetails_body"
+            android:id="@+id/tv_user_profile_details_phone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="35dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/messages_list_shape"
-            android:text=" Message body :"
+            android:text=" Phone number :"
             android:textColor="@color/primary"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_user_profile_details_block"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:text="Block"
+            android:textColor="@color/primary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/ib_user_profile_details_block"
+            android:layout_width="52dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/block" />
+
+
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_dialog_messageDetails_reply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Reply to"
-        android:textColor="@color/primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/ib_dialog_messageDetails_reply"
-        app:layout_constraintEnd_toEndOf="@+id/ib_dialog_messageDetails_reply"
-        app:layout_constraintStart_toStartOf="@+id/ib_dialog_messageDetails_reply" />
-
-    <ImageButton
-        android:id="@+id/ib_dialog_messageDetails_reply"
-        android:layout_width="52dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="65dp"
-        android:layout_marginBottom="8dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/reply"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <ImageButton
-        android:id="@+id/ib_dialog_messageDetails_watch"
-        android:layout_width="52dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/user_info"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_dialog_messageDetails_watch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/primary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/ib_dialog_messageDetails_watch"
-        app:layout_constraintEnd_toEndOf="@+id/ib_dialog_messageDetails_watch"
-        app:layout_constraintStart_toStartOf="@+id/ib_dialog_messageDetails_watch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

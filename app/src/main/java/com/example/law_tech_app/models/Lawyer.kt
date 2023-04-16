@@ -17,7 +17,7 @@ open class Lawyer (
     val aboutMe:String = "",
     override val imageURL:String = "",
     val blockedClients: ArrayList<String> = ArrayList(),
-    val availabilityTime:ArrayList<Double> = ArrayList()
+    val availabilityTime:ArrayList<ArrayList<Double>> = ArrayList()
 
 ):User(),Parcelable
 {

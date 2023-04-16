@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.law_tech_app.activities.*
+import com.example.law_tech_app.adapters.MessagesListAdapter
 import com.example.law_tech_app.fragments.BaseFragment
 import com.example.law_tech_app.fragments.LawyerCalendarFragment
 import com.example.law_tech_app.fragments.LawyerNotificationsFragment
@@ -241,12 +242,11 @@ class FirestoreClass {
                             updateEvent(eventHashMap,documentReference.id,activity,null)
                         }
                     }.addOnFailureListener {
-                        Log.e("matan","Fail1")
+                        e->e.printStackTrace()
 
                     }
             }.addOnFailureListener {
-                Log.e("matan","Fail")
-
+                e->e.printStackTrace()
             }
     }
     fun deleteEventFromFirestore(id: String,fragment: BaseFragment){
@@ -295,7 +295,27 @@ class FirestoreClass {
             }
     }
 
+    fun getUserFromFirestore(uid: String,collectionName: String,adapter: MessagesListAdapter)
+    {
 
+        mFireStore.collection(collectionName)
+            .document(uid).get()
+            .addOnSuccessListener { document ->
+                val user: User? = if (document.exists()) {
+                    when (collectionName) {
+                        Constants.LAWYERS -> {
+                            document.toObject(Lawyer::class.java)!!
+                        }
+                        else -> {
+                            document.toObject(Client::class.java)!!
+                        }
+                    }
+                } else {
+                    null
+                }
+                adapter.createUserProfileDialog(user!!)
+            }
+    }
     fun addMessageToFirestore(message:Message, fragment: BaseFragment)
     {
         mFireStore.collection(Constants.MESSAGES)
@@ -313,7 +333,6 @@ class FirestoreClass {
 
                     }
                 }.addOnFailureListener {
-                        Log.e("matan","Fail1")
                     when(fragment){
                         is LawyerNotificationsFragment->{
                             fragment.hideProgressDialog()
@@ -321,7 +340,7 @@ class FirestoreClass {
                     }
                 }
             }.addOnFailureListener {
-                Log.e("matan","Fail")
+
                 when(fragment){
                     is LawyerNotificationsFragment->{
                         fragment.hideProgressDialog()

@@ -31,7 +31,7 @@
                 app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_messageDetails_img"
+                android:id="@+id/iv_lawyerFragment_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
@@ -50,8 +50,8 @@
             android:id="@+id/buttonPanel"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
-            app:layout_constraintTop_toBottomOf ="@id/frameLayout2"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/frameLayout2">
 
             <ImageButton
                 android:id="@+id/btn_lawyerFragment_Camera"
@@ -84,19 +84,23 @@
             android:layout_width="378dp"
             android:layout_height="56dp"
             android:layout_gravity="center"
+            android:baselineAligned="false"
             android:gravity="right"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonPanel">
+            app:layout_constraintTop_toBottomOf="@id/buttonPanel"
+            app:boxStrokeWidth="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tie_lawyerFragment_Fullname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@drawable/messages_list_shape"
                 android:hint="Full name"
                 android:minHeight="48dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -108,12 +112,14 @@
             android:gravity="center|right"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+            app:boxStrokeWidth="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tie_lawyerFragment_Email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/messages_list_shape"
                 android:hint="Email"
                 android:textStyle="bold" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -127,13 +133,16 @@
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+            app:boxStrokeWidth="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tie_lawyerFragment_License"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/messages_list_shape"
                 android:hint="License number"
+                android:outlineProvider="none"
                 android:textStyle="bold" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,16 +154,19 @@
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
+            app:boxStrokeWidth="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tie_lawyerFragment_Speical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/messages_list_shape"
                 android:hint="Specialization"
                 android:textStyle="bold"
                 tools:ignore="DuplicateClickableBoundsCheck" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="378dp"
             android:layout_height="56dp"
@@ -163,12 +175,14 @@
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
+            app:boxStrokeWidth="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tie_lawyerFragment_Phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/messages_list_shape"
                 android:hint="Phone number"
                 android:textStyle="bold" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -181,12 +195,14 @@
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
+            app:boxStrokeWidth="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tie_lawyerFragment_About"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:background="@drawable/messages_list_shape"
                 android:gravity="top|left"
                 android:hint="About me"
                 android:textStyle="bold" />
@@ -256,7 +272,6 @@
             android:layout_width="match_parent"
             android:layout_height="107dp"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/buttonBottomPanel">
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@id/buttonBottomPanel"></androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </ScrollView>

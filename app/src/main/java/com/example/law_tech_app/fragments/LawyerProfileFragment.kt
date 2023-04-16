@@ -21,6 +21,7 @@ import com.example.law_tech_app.models.Lawyer
 import com.example.law_tech_app.utils.Constants
 import com.example.law_tech_app.utils.GlideLoader
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -60,9 +61,10 @@ open class LawyerProfileFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val fragView = inflater.inflate(R.layout.fragment_lawyer_profile, container, false)
-        imageView = fragView.findViewById(R.id.iv_messageDetails_img)
+        imageView = fragView.findViewById(R.id.iv_lawyerFragment_img)
         imageView.adjustViewBounds = true
         tieFullName = fragView.findViewById(R.id.tie_lawyerFragment_Fullname)
+
         tieEmail = fragView.findViewById(R.id.tie_lawyerFragment_Email)
         tieLicense = fragView.findViewById(R.id.tie_lawyerFragment_License)
         tieSpecial = fragView.findViewById(R.id.tie_lawyerFragment_Speical)
@@ -109,8 +111,7 @@ open class LawyerProfileFragment : BaseFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when(id) {
+        when(item.itemId) {
             R.id.icon_edit_profile->{
                 enableEditing()
                  icon = item

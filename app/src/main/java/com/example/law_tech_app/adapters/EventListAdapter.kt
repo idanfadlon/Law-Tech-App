@@ -96,7 +96,7 @@ class EventListAdapter(
             eventDetailsDialog.dismiss()
         }
         eventDetailsDialog.ib_dialog_delete.setOnClickListener {
-            showAlertDialog("Delete Event","Are you sure you want to cancel this event ?",event.id,position)
+            showAlertDialog("Cancel Event","Are you sure you want to cancel this event ?",event.id,position)
         }
         eventDetailsDialog.setCancelable(true)
         eventDetailsDialog.setCanceledOnTouchOutside(true)

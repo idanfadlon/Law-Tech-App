@@ -24,6 +24,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="5dp"
             android:background="@drawable/iv_message_image_background"
+            android:clickable="true"
             app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
             app:strokeWidth="1dp">
 

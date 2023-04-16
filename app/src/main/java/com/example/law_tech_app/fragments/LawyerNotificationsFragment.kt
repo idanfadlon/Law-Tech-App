@@ -53,11 +53,6 @@ class LawyerNotificationsFragment :BaseFragment() {
                 messages.add(msg)
             }
         }
-        messages.add(
-            Message(
-
-            )
-        )
 
         if (messages.size > 0){
             rv_lawyer_notifications.visibility = View.VISIBLE

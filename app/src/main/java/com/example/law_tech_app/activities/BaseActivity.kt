@@ -12,8 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.law_tech_app.R
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.toast_layout.*
-import kotlinx.android.synthetic.main.toast_layout.view.*
+
 
 
 open class BaseActivity : AppCompatActivity() {
@@ -23,7 +22,6 @@ open class BaseActivity : AppCompatActivity() {
     fun showErrorSnackBar(message: String, isError: Boolean) {
         val snackBar =
             Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG)
-        snackBar.setTextColor(resources.getColor(R.color.primary))
         val snackBarView = snackBar.view
         if (isError) {
             snackBarView.setBackgroundColor(
