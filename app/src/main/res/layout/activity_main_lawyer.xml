@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".activities.LawyerMainActivity">
 
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menu_main_lawyer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary"
-        app:itemIconTint="@color/yellow"
-        app:itemTextColor="@color/yellow"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

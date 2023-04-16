@@ -6,7 +6,7 @@
     <string name="loading">Loading..</string>
     <string name="err_msg_enter_email"><b>Email is missing ! Please enter email !</b></string>
     <string name="err_msg_enter_password"><b>Password is missing ! Please enter password !</b></string>
-    ont
+
     <string name="dont_have_account">Don\'t have an account ?</string>
     <string name="register">Register</string>
     <string name="forgot_password_tv1"><b>Forgot your password ?</b></string>
@@ -17,5 +17,29 @@
     <string name="edit"><u><b>Edit</b></u></string>
     <string name="yes"><b>Yes</b></string>
     <string name="no"><b>No</b></string>
+    <string-array name="priority_spinner_items">
+        <item>Immediate</item>
+        <item>High</item>
+        <item>Normal</item>
+        <item>Low</item>
+    </string-array>
+    <string-array name="types_spinner_items">
+        <item>Consultation</item>
+        <item>Documents Transfer</item>
+        <item>Personal</item>
+        <item>Court</item>
+        <item>Administrative</item>
+        <item>Company Event</item>
+        <item>Case Handling</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="freqs_spinner_items">
+        <item>Monthly</item>
+        <item>Weekly</item>
+        <item>Daily</item>
+        <item>Always</item>
+    </string-array>
+
 
 </resources>

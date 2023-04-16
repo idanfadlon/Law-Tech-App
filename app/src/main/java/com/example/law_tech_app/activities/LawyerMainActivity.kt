@@ -40,7 +40,6 @@ import java.io.IOException
 need to add permissions dialog when user in logged in for the first time
 */
 class LawyerMainActivity : BaseActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?)
     {
 
@@ -49,7 +48,6 @@ class LawyerMainActivity : BaseActivity() {
         supportActionBar!!.setBackgroundDrawable(ContextCompat.getDrawable(
             this@LawyerMainActivity,
             R.drawable.app_gradient_color_background))
-
         val navView :BottomNavigationView = findViewById(R.id.menu_main_lawyer)
         val navController = findNavController(R.id.fragmentContainer_lawyer_container)
         val appBarConfiguration = AppBarConfiguration(setOf(
@@ -63,14 +61,16 @@ class LawyerMainActivity : BaseActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.P)
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == RESULT_OK) {
+        if(resultCode == RESULT_OK)
+        {
             if (requestCode == Constants.IMAGE_UPLOAD_CODE) {
                 if (data != null) {
                     try {
+                        showProgressDialog(resources.getString(R.string.loading))
                         val selectedImageFileURI = data.data!!
                         val sref: StorageReference =
                             FirebaseStorage.getInstance().reference.child("Image " + FirestoreClass().getCurrentUserID() + ".jpg")
@@ -80,21 +80,23 @@ class LawyerMainActivity : BaseActivity() {
                                 currentUserHashMap[Constants.IMAGE_URL] = url.toString()
                                 FirestoreClass().updateCurrentUserDetails(
                                     currentUserHashMap,
-                                    Constants.LAWYERS
+                                    Constants.LAWYERS,
+                                    null
                                 )
+
 
                             }
                         }
-
+                        hideProgressDialog()
                     } catch (e: IOException) {
                         e.printStackTrace()
                     }
 
                 }
             }else if(requestCode == Constants.IMAGE_REQUEST_CODE){
-                if (data !=null && data.extras !=null)
+                if (data !=null)
                 {
-                   //TODO figure out how to set the profile picture
+                    Log.e("matan", data.data.toString())
                 }
             }
         }
@@ -105,6 +107,10 @@ class LawyerMainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (intent.hasExtra(Constants.IS_EVENT_ADDED)){
+            showErrorSnackBar("Event was successfully added !",false)
+            intent.removeExtra(Constants.IS_EVENT_ADDED)
+        }
     }
 
 }

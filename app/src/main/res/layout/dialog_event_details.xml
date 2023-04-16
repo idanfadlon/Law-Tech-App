@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="400dp"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/tv_dilaog_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textColor="@color/primary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_dilaog_participants"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/messages_list_shape"
+        android:text="Participants :"
+        android:textColor="@color/primary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_dilaog_duration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/messages_list_shape"
+        android:text="Duration :"
+        android:textColor="@color/primary"
+        app:layout_constraintStart_toStartOf="@+id/tv_dilaog_participants"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dilaog_participants" />
+
+    <TextView
+        android:id="@+id/tv_dilaog_description"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/messages_list_shape"
+        android:text="Description :"
+        android:textColor="@color/primary"
+        app:layout_constraintStart_toStartOf="@+id/tv_dilaog_time"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dilaog_time" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="Add to my "
+        android:textColor="@color/primary"
+        app:layout_constraintBottom_toTopOf="@+id/ib_dialog_google"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="Update event"
+        android:textColor="@color/primary"
+        app:layout_constraintBottom_toTopOf="@+id/ib_dialog_update"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+    <ImageButton
+        android:id="@+id/ib_dialog_google"
+        android:layout_width="48dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView12"
+        app:layout_constraintStart_toStartOf="@+id/textView12"
+        app:srcCompat="@drawable/calendar1" />
+
+    <ImageButton
+        android:id="@+id/ib_dialog_update"
+        android:layout_width="48dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView13"
+        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:srcCompat="@drawable/calendar_update" />
+
+    <TextView
+        android:id="@+id/tv_dilaog_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/messages_list_shape"
+        android:text="Time :"
+        android:textColor="@color/primary"
+        app:layout_constraintStart_toStartOf="@+id/tv_dilaog_duration"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dilaog_duration" />
+
+    <ImageButton
+        android:id="@+id/ib_dialog_delete"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView10"
+        app:layout_constraintStart_toStartOf="@+id/textView10"
+        app:srcCompat="@drawable/cancel1" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:text="Cancel Event"
+        android:textColor="@color/primary"
+        app:layout_constraintEnd_toStartOf="@+id/textView13"
+        app:layout_constraintStart_toEndOf="@+id/textView12"
+        app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

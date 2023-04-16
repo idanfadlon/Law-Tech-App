@@ -15,15 +15,19 @@ open class Lawyer (
     val specialization :String = "",
     override val phoneNumber:String = "",
     val aboutMe:String = "",
-    val imageURL:String = "",
+    override val imageURL:String = "",
     val blockedClients: ArrayList<String> = ArrayList(),
-    val messages : ArrayList<Message> = ArrayList()
+    val availabilityTime:ArrayList<ArrayList<Double>> = ArrayList()
 
 ):User(),Parcelable
 {
     //represent the collection this object belong to
     override fun toString(): String {
         return "lawyers"
+    }
+
+    override fun describeContents(): Int {
+        TODO("Not yet implemented")
     }
 
 }
