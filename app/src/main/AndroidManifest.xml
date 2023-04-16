@@ -14,19 +14,17 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="Law-Tech"
-        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LawTechApp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-
         <activity
-            android:name=".activities.AddEventActivity"
-            android:exported="false"
-            android:theme="@style/Theme.LawTechApp.NoActionBar"></activity>
-
+            android:name=".activities.MessageDetailsActivity"
+            android:theme="@style/Theme.LawTechApp.NoActionBar"
+            android:exported="true"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".activities.SplashActivity"
             android:exported="true"
@@ -38,8 +36,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LawyerMainActivity" />
-        <activity android:name=".activities.ClientMainActivity" />
+        <activity android:name=".activities.LawyerMainActivity"></activity>
+        <activity
+            android:name=".activities.ClientMainActivity"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
         <activity
             android:name=".activities.LoginActivity"
             android:exported="true"
@@ -49,12 +50,12 @@
             android:name=".activities.ForgotPasswordActivity"
             android:exported="true"
             android:screenOrientation="fullSensor"
-            android:theme="@style/Theme.LawTechApp.NoActionBar" />
+            android:theme="@style/Theme.LawTechApp.NoActionBar"></activity>
         <activity
             android:name=".activities.SignUpActivity"
             android:exported="true"
             android:screenOrientation="fullSensor"
-            android:theme="@style/Theme.LawTechApp.NoActionBar" />
+            android:theme="@style/Theme.LawTechApp.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".fragments.ClientProfileFragment">
+        tools:context=".fragments.LawyerProfileFragment">
 
         <FrameLayout
             android:id="@+id/frameLayout2"
@@ -48,23 +48,23 @@
             android:layout_gravity="center">
 
             <ImageButton
-                android:id="@+id/btn_clientFragment_Camera"
+                android:id="@+id/btn_lawyerFragment_Camera"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
 
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btn_clientFragment_upload"
+                app:layout_constraintEnd_toStartOf="@+id/btn_lawyerFragment_upload"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_add_a_photo_24"
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <ImageButton
-                android:id="@+id/btn_clientFragment_upload"
+                android:id="@+id/btn_lawyerFragment_upload"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btn_clientFragment_Camera"
+                app:layout_constraintStart_toEndOf="@+id/btn_lawyerFragment_Camera"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_upload_24"
                 tools:ignore="SpeakableTextPresentCheck" />
@@ -97,7 +97,7 @@
             app:layout_constraintTop_toBottomOf="@id/buttonPanel">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tie_clientFragment_Fullname"
+                android:id="@+id/tie_lawyerFragment_Fullname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -118,14 +118,31 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tie_clientFragment_Email"
+                android:id="@+id/tie_lawyerFragment_Email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
                 android:textStyle="bold" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout3"
+            android:layout_width="378dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tie_lawyerFragment_License"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="License number"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="378dp"
@@ -138,10 +155,47 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tie_clientFragment_Phone"
+                android:id="@+id/tie_lawyerFragment_Speical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Specialization"
+                android:textStyle="bold"
+                tools:ignore="DuplicateClickableBoundsCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="378dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tie_lawyerFragment_Phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Phone number"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="377dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tie_lawyerFragment_About"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:gravity="top|left"
+                android:hint="About me"
                 android:textStyle="bold" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -163,7 +217,7 @@
                 app:layout_constraintVertical_bias="0.537" />
 
             <Button
-                android:id="@+id/btn_client_profileFragment"
+                android:id="@+id/btn_lawyer_profileFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"

@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ClientNotificationsFragment"
+    tools:context=".fragments.LawyerNotificationsFragment"
     >
 
     <TextView
-        android:id="@+id/tv_client_notifications_noFound"
+        android:id="@+id/tv_lawyer_notifications_noFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No notifications found"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_client_notifications"
+        android:id="@+id/rv_lawyer_notifications"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"

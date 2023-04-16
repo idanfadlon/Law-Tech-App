@@ -28,7 +28,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 
-class SignUpActivity : BaseActivity() {
+class SignUpActivity : com.example.law_tech_app.activities.BaseActivity() {
     lateinit var tieFullName: TextInputEditText
     lateinit var tieEmail: TextInputEditText
     lateinit var tiePassword: TextInputEditText
@@ -111,8 +111,8 @@ class SignUpActivity : BaseActivity() {
     }
     fun lawyerSignUpSuccess(){
         hideProgressDialog()
-        val intent = Intent(this@SignUpActivity, LawyerMainActivity::class.java)
         Toast.makeText(this,"Signup as lawyer has been successfully completed",Toast.LENGTH_SHORT).show()
+        val intent = Intent(this@SignUpActivity, LawyerMainActivity::class.java)
         startActivity(intent)
         finish()
     }

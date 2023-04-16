@@ -229,22 +229,25 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:id="@+id/til_specialization"
                 android:layout_width="match_parent"
                 android:layout_height="62dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:gravity="bottom"
                 app:layout_constraintTop_toBottomOf="@+id/til_licenseNumber"
                 tools:visibility="gone">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tie_specialization"
+                <AutoCompleteTextView
+                    android:id="@+id/actv_specialization"
+                    android:background="@color/white"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="62dp"
 
-                    android:hint="Enter your specialization"
-                    android:inputType="text"
+                    android:hint="Specialization"
+                    android:inputType="none"
                     android:textSize="20sp"
                     android:visibility="gone"
                     tools:visibility="gone" />

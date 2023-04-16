@@ -3,22 +3,28 @@ package com.example.law_tech_app.Firestore
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import com.example.law_tech_app.activities.ClientMainActivity
 import com.example.law_tech_app.activities.LawyerMainActivity
 import com.example.law_tech_app.activities.LoginActivity
 import com.example.law_tech_app.activities.SignUpActivity
-import com.example.law_tech_app.fragments.*
+import com.example.law_tech_app.fragments.BaseFragment
+import com.example.law_tech_app.fragments.ClientNotificationsFragment
+import com.example.law_tech_app.fragments.LawyerNotificationsFragment
+import com.example.law_tech_app.fragments.LawyerProfileFragment
 import com.example.law_tech_app.models.Client
 import com.example.law_tech_app.models.Lawyer
 import com.example.law_tech_app.models.User
 import com.example.law_tech_app.utils.Constants
+import com.example.law_tech_app.utils.GlideLoader
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_forgot_password.*
+import kotlinx.android.synthetic.main.activity_main_lawyer.*
+import kotlinx.android.synthetic.main.fragment_lawyer_profile.view.*
 
 
 ///**
@@ -126,15 +132,6 @@ class FirestoreClass {
                             fragment.loadingMessagesSuccess((currentUser as Lawyer).messages)
                         }
                     }
-
-                    is ClientMainActivity ->{
-                        if (fragment != null && (fragment is ClientProfileFragment)){
-                            fragment.loadUserDetails(currentUser as Client)
-                        }
-                        if (fragment !=null && (fragment is ClientNotificationsFragment)){
-                            fragment.loadingMessagesSuccess((currentUser as Client).messages)
-                        }
-                    }
                 }
 
             }
@@ -170,7 +167,4 @@ class FirestoreClass {
 
 
     }
-    fun getCollectionData(collectionName: String): CollectionReference {
-        return mFireStore.collection(collectionName)
-
-    }}
+}

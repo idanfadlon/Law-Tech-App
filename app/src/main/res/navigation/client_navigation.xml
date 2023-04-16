@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/icon_menu_search"
-        android:name="com.example.law_tech_app.fragments.ClientSearchLawyerFragment"
+        android:name="com.example.law_tech_app.fragments.ClientSearchLawyerInCategoryFragment"
         android:label="Find a lawyer"
-        tools:layout="@layout/fragment_client_search_lawyer" />
+        tools:layout="@layout/fragment_client_search_lawyer_in_category" />
     <fragment
         android:id="@+id/icon_menu_notifications"
         android:name="com.example.law_tech_app.fragments.ClientNotificationsFragment"
