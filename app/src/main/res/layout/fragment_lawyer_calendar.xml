@@ -20,21 +20,20 @@
         android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_lawyerFragment_meetings"
         android:layout_width="match_parent"
-        android:layout_height="523dp"
+        android:layout_height="375dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="1dp"
+        android:background="@drawable/messages_list_shape"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_lawyerFragment_meetings_noEvents" />
+        app:layout_constraintTop_toBottomOf="@+id/calendar_lawyerFragment" />
 
     <TextView
         android:id="@+id/tv_lawyerFragment_meetings_noEvents"

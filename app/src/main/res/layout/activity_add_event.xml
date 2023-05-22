@@ -10,21 +10,11 @@
         android:id="@+id/spinner_addEvent_priority"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/spinner_shape"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Spinner
-        android:id="@+id/spinner_addEvent_freq"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:background="@drawable/spinner_shape"
-        app:layout_constraintEnd_toEndOf="@+id/textView4"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Spinner
         android:id="@+id/spinner_addEvent_type"
@@ -91,9 +81,9 @@
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="19dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Duration :"
+        android:text="Start time :"
         android:textColor="@color/primary"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout5"
@@ -130,23 +120,6 @@
             android:id="@+id/tie_addEvent_participants"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/messages_list_shape" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout4"
-        android:layout_width="60dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/textView15"
-        app:layout_constraintStart_toStartOf="@+id/textView15"
-        app:layout_constraintTop_toBottomOf="@+id/textView15"
-        app:boxStrokeWidth="0dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tie_addEvent_duration"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:background="@drawable/messages_list_shape" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -208,13 +181,13 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="82dp"
+        android:layout_marginTop="16dp"
         android:text="Priority :"
         android:textColor="@color/primary"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/spinner_addEvent_freq"
-        app:layout_constraintStart_toStartOf="@+id/spinner_addEvent_freq"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_addEvent_freq" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_addEvent_type" />
 
     <TextView
         android:id="@+id/textView5"
@@ -228,15 +201,65 @@
         app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout5" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="60dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="8dp"
+        app:boxStrokeWidth="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/textView18"
+        app:layout_constraintStart_toStartOf="@+id/textView18"
+        app:layout_constraintTop_toBottomOf="@+id/textView18">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_addEvent_preparing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/messages_list_shape" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Frequency :"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="16dp"
+        android:text="Preparing Duration :"
         android:textColor="@color/primary"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/spinner_addEvent_type"
-        app:layout_constraintStart_toStartOf="@+id/spinner_addEvent_type"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_addEvent_type" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_addEvent_priority" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="60dp"
+        android:text="End time :"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_addEvent_pickTime_start" />
+
+    <Button
+        android:id="@+id/btn_addEvent_pickTime_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Pick time"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/textView19"
+        app:layout_constraintStart_toStartOf="@+id/textView19"
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+    <Button
+        android:id="@+id/btn_addEvent_pickTime_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="pick time"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/textView15"
+        app:layout_constraintStart_toStartOf="@+id/textView15"
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
 </androidx.constraintlayout.widget.ConstraintLayout>

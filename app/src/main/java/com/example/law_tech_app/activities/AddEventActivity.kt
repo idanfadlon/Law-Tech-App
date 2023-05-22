@@ -1,10 +1,12 @@
 package com.example.law_tech_app.activities
 
 
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.Toast
@@ -14,19 +16,23 @@ import com.example.law_tech_app.fragments.LawyerCalendarFragment
 import com.example.law_tech_app.models.Event
 import com.example.law_tech_app.utils.Constants
 import com.google.android.material.textfield.TextInputEditText
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 
 class AddEventActivity : BaseActivity() {
     lateinit var tie_subject:TextInputEditText
     lateinit var tie_participants:TextInputEditText
     lateinit var tie_description:TextInputEditText
-    lateinit var tie_duration:TextInputEditText
+    lateinit var tie_preparing:TextInputEditText
     lateinit var typesSpinner:Spinner
     lateinit var prioritySpinner:Spinner
-    lateinit var freqsSpinner:Spinner
     lateinit var addBtn:ImageButton
     lateinit var currentDayAndMonth:ArrayList<Int>
-
+    lateinit var pickTimeEnd:Button
+    lateinit var pickTimeStart:Button
+    lateinit var calendarEnd:Calendar
+    lateinit var calendarStart:Calendar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +43,36 @@ class AddEventActivity : BaseActivity() {
         tie_subject = findViewById(R.id.tie_addEvent_subject)
         tie_participants = findViewById(R.id.tie_addEvent_participants)
         tie_description = findViewById(R.id.tie_addEvent_description)
-        tie_duration = findViewById(R.id.tie_addEvent_duration)
+        tie_preparing = findViewById(R.id.tie_addEvent_preparing)
         typesSpinner = findViewById(R.id.spinner_addEvent_type)
         prioritySpinner = findViewById(R.id.spinner_addEvent_priority)
-        freqsSpinner = findViewById(R.id.spinner_addEvent_freq)
         addBtn = findViewById(R.id.ib_addEvent_add)
         addBtn.setOnClickListener {
             if(validateInput()){
                 addEventToFirestore()
             }
         }
+        pickTimeStart = findViewById(R.id.btn_addEvent_pickTime_start)
+        pickTimeStart.setOnClickListener {
+            calendarStart = Calendar.getInstance()
+            val timeSetListener = TimePickerDialog.OnTimeSetListener{timePicker,hour,minute ->
+                calendarStart.set(Calendar.HOUR_OF_DAY,hour)
+                calendarStart.set(Calendar.MINUTE,minute)
+                pickTimeStart.text = SimpleDateFormat("HH:mm").format(calendarStart.time)
+            }
+            TimePickerDialog(this,timeSetListener,calendarStart.get(Calendar.HOUR_OF_DAY),calendarStart.get(Calendar.MINUTE),true).show()
+        }
+        pickTimeEnd = findViewById(R.id.btn_addEvent_pickTime_end)
+        pickTimeEnd.setOnClickListener {
+            calendarEnd = Calendar.getInstance()
+            val timeSetListener = TimePickerDialog.OnTimeSetListener{timePicker,hour,minute ->
+                calendarEnd.set(Calendar.HOUR_OF_DAY,hour)
+                calendarEnd.set(Calendar.MINUTE,minute)
+                pickTimeEnd.text = SimpleDateFormat("HH:mm").format(calendarEnd.time)
+            }
+            TimePickerDialog(this,timeSetListener,calendarEnd.get(Calendar.HOUR_OF_DAY),calendarEnd.get(Calendar.MINUTE),true).show()
+        }
+
         ArrayAdapter.createFromResource(
             this,
             R.array.types_spinner_items,
@@ -54,14 +80,6 @@ class AddEventActivity : BaseActivity() {
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.select_dialog_item)
             typesSpinner.adapter = adapter
-        }
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.freqs_spinner_items,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.select_dialog_item)
-            freqsSpinner.adapter = adapter
         }
         ArrayAdapter.createFromResource(
             this,
@@ -75,6 +93,7 @@ class AddEventActivity : BaseActivity() {
 
     private fun addEventToFirestore(){
         showProgressDialog(resources.getString(R.string.loading))
+        val duration = ((calendarEnd.get(Calendar.HOUR_OF_DAY) - calendarStart.get(Calendar.HOUR_OF_DAY)) * 60) + (calendarEnd.get(Calendar.MINUTE) - calendarStart.get(Calendar.MINUTE))
         val event = Event(
             "",
             FirestoreClass().getCurrentUserID(),
@@ -83,10 +102,11 @@ class AddEventActivity : BaseActivity() {
             currentDayAndMonth[0],
             currentDayAndMonth[1],
             prioritySpinner.selectedItem.toString(),
-            tie_duration.text.toString().toDouble(),
+            duration.toDouble(),
             tie_description.text.toString(),
             typesSpinner.selectedItem.toString(),
-            freqsSpinner.selectedItem.toString()
+            tie_preparing.text.toString().toDouble(),
+            SimpleDateFormat("HH:mm").format(calendarStart.time) + "-" + SimpleDateFormat("HH:mm").format(calendarEnd.time)
         )
         FirestoreClass().addEventToFirestore(event,this)
 
@@ -110,10 +130,6 @@ class AddEventActivity : BaseActivity() {
             }
             TextUtils.isEmpty(tie_description.text.toString().trim { it <= ' ' }) -> {
                 showErrorSnackBar("Please enter a little description !", true)
-                false
-            }
-            TextUtils.isEmpty(tie_duration.text.toString().trim { it <= ' ' }) -> {
-                showErrorSnackBar("Please enter duration !", true)
                 false
             }
             else -> {

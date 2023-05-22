@@ -1,7 +1,9 @@
 package com.example.law_tech_app.models
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+
+
+import kotlinx.parcelize.Parcelize
 @Parcelize
 open class Client (
     override val uid:String ="",

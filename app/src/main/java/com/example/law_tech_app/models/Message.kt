@@ -2,7 +2,7 @@ package com.example.law_tech_app.models
 
 import android.content.BroadcastReceiver
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize

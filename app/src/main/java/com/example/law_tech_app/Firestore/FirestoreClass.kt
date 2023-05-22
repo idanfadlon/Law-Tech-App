@@ -14,12 +14,16 @@ import com.example.law_tech_app.fragments.LawyerProfileFragment
 import com.example.law_tech_app.models.*
 import com.example.law_tech_app.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.tasks.await
 
 
 ///**
@@ -170,7 +174,8 @@ class FirestoreClass {
                 e-> Log.e("matan",e.toString())
             }
     }
-    fun getEventsFromFirestore(fragment: Fragment? = null,day:Int,month:Int){
+    fun getEventsFromFirestore(fragment: Fragment?, day:Int, month:Int){
+
         mFireStore.collection(Constants.EVENTS)
             .whereEqualTo("owner",getCurrentUserID())
             .whereEqualTo("eventDay",day)
@@ -262,7 +267,30 @@ class FirestoreClass {
                 fragment.hideProgressDialog()
             }
     }
+    suspend fun deleteEventsAfterOptimization(idList:ArrayList<Event>,fragment: LawyerCalendarFragment){
+        try {
+            idList.forEach {
+                mFireStore.collection(Constants.EVENTS)
+                    .document(it.id).delete().await()
+            }
+            fragment.optimizationSuccess()
+        }catch (_:FirebaseFirestoreException){
+            fragment.hideProgressDialog()
+        }
+    }
+    suspend fun updateEventsAfterOptimization(times:ArrayList<String>,events:ArrayList<Event>){
+        try {
+            for (i in 0 until events.size){
+                val hashMap = HashMap<String,Any>()
+                hashMap["time"] = times[i]
+                mFireStore.collection(Constants.EVENTS)
+                    .document(events[i].id).update(hashMap).await()
+            }
+        }catch (e:FirebaseFirestoreException){
 
+        }
+
+    }
     private fun updateMessage(messageHashMap: HashMap<String,Any>, id:String, fragment: BaseFragment){
         mFireStore.collection(Constants.MESSAGES)
             .document(id).update(messageHashMap)
@@ -294,6 +322,9 @@ class FirestoreClass {
                 fragment.hideProgressDialog()
             }
     }
+    fun getCollectionData(collectionName: String): CollectionReference {
+        return mFireStore.collection(collectionName)
+    }
 
     fun getUserFromFirestore(uid: String,collectionName: String,adapter: MessagesListAdapter)
     {
@@ -316,6 +347,7 @@ class FirestoreClass {
                 adapter.createUserProfileDialog(user!!)
             }
     }
+
     fun addMessageToFirestore(message:Message, fragment: BaseFragment)
     {
         mFireStore.collection(Constants.MESSAGES)

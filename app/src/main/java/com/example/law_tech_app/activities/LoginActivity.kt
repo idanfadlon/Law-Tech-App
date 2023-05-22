@@ -18,9 +18,6 @@ import com.example.law_tech_app.models.User
 import com.example.law_tech_app.utils.Constants
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_login.view.*
-
 
 class LoginActivity: BaseActivity() {
     lateinit var tie_email: TextInputEditText

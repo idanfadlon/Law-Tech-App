@@ -2,20 +2,27 @@ package com.example.law_tech_app.adapters
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.Context
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
 import com.example.law_tech_app.activities.BaseActivity
 import com.example.law_tech_app.fragments.BaseFragment
 import com.example.law_tech_app.models.Event
-import kotlinx.android.synthetic.main.dialog_event_details.*
-import kotlinx.android.synthetic.main.dialog_update_event_details.*
-import kotlinx.android.synthetic.main.events_lawyer_list.view.*
+import com.google.android.material.textfield.TextInputEditText
+import java.text.SimpleDateFormat
+import java.util.Calendar
+
 
 class EventListAdapter(
     val context: Context,
@@ -27,7 +34,8 @@ class EventListAdapter(
     private lateinit var updateEventDialog: Dialog
     private lateinit var prioritySpinner: Spinner
     private lateinit var eventTypesSpinner: Spinner
-    private lateinit var freqsTypesSpinner: Spinner
+    private lateinit var calendarStart:Calendar
+    private lateinit var calendarEnd:Calendar
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MessagesListAdapter.MyViewHolder(
@@ -40,35 +48,38 @@ class EventListAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
         val event = events[position]
-        holder.itemView.tv_events_lawyer_subject.text = holder.itemView.tv_events_lawyer_subject.text.toString() + " " + event.subject
-        holder.itemView.tv_events_lawyer_participants.text = holder.itemView.tv_events_lawyer_participants.text.toString() + " " + event.participants
-        holder.itemView.tv_events_lawyer_time.text = holder.itemView.tv_events_lawyer_time.text.toString() + ""
+        val tvSubject = holder.itemView.findViewById<TextView>(R.id.tv_events_lawyer_subject)
+        tvSubject.text = tvSubject.text.toString() + " " + event.subject
+        val tvParticipants = holder.itemView.findViewById<TextView>(R.id.tv_events_lawyer_participants)
+        tvParticipants.text = tvParticipants.text.toString() + " " + event.participants
+        val tvTime = holder.itemView.findViewById<TextView>(R.id.tv_events_lawyer_time)
+        tvTime.text = tvTime.text.toString() + "  " + event.time
+        val iv =  holder.itemView.findViewById<ImageView>(R.id.iv_events_lawyer_icon)
         when(event.type){
             "Consultation" -> {
-                holder.itemView.iv_events_lawyer_icon.setImageResource(R.drawable.icon_consultation)
+                iv.setImageResource(R.drawable.icon_consultation)
             }
             "Documents Transfer"->{
-                holder.itemView.iv_events_lawyer_icon.setImageResource(R.drawable.icon_documents)
+                iv.setImageResource(R.drawable.icon_documents)
             }
             "Personal"->{
-                holder.itemView.iv_events_lawyer_icon.setImageResource(R.drawable.icon_personal)
+                iv.setImageResource(R.drawable.icon_personal)
             }
             "Court"->{
-                holder.itemView.iv_events_lawyer_icon.setImageResource(R.drawable.icon_court)
+                iv.setImageResource(R.drawable.icon_court)
             }
             "Administrative"->{
-                holder.itemView.iv_events_lawyer_icon.setImageResource(R.drawable.icon_administrative)
+                iv.setImageResource(R.drawable.icon_administrative)
             }
             "Company Event"->{
-                holder.itemView.iv_events_lawyer_icon.setImageResource(R.drawable.icon_company)
+                iv.setImageResource(R.drawable.icon_company)
             }
             "Case Handling"->{
-                holder.itemView.iv_events_lawyer_icon.setImageResource(R.drawable.icon_case)
+                iv.setImageResource(R.drawable.icon_case)
             }
             "Other"->{
-                holder.itemView.iv_events_lawyer_icon.setImageResource(R.drawable.ca)
+                iv.setImageResource(R.drawable.ca)
             }
         }
         holder.itemView.setOnClickListener{
@@ -84,18 +95,27 @@ class EventListAdapter(
     fun createEventDetailsDialog(event: Event,position: Int){
         eventDetailsDialog = Dialog(context)
         eventDetailsDialog.setContentView(R.layout.dialog_event_details)
-        eventDetailsDialog.tv_dilaog_subject.text = event.subject
-        eventDetailsDialog.tv_dilaog_participants.text =  eventDetailsDialog.tv_dilaog_participants.text.toString() + " " + event.participants
-        eventDetailsDialog.tv_dilaog_duration.text = eventDetailsDialog.tv_dilaog_duration.text.toString() + " " + (event.duration * 100).toString() + " Min"
-        eventDetailsDialog.tv_dilaog_description.text = eventDetailsDialog.tv_dilaog_description.text.toString()  + " " + event.description
-        eventDetailsDialog.ib_dialog_google.setOnClickListener{
+        val tvSubject = eventDetailsDialog.findViewById<TextView>(R.id.tv_dilaog_subject)
+        tvSubject.text = event.subject
+        val tvParticipants = eventDetailsDialog.findViewById<TextView>(R.id.tv_dilaog_participants)
+        tvParticipants.text =  tvParticipants.text.toString() + " " + event.participants
+        val tvDuration = eventDetailsDialog.findViewById<TextView>(R.id.tv_dilaog_duration)
+        tvDuration.text = tvDuration.text.toString() + " " + (event.duration).toString() + " Min(s)"
+        val tvTime = eventDetailsDialog.findViewById<TextView>(R.id.tv_dilaog_time)
+        tvTime.text = tvTime.text.toString() + " " + event.eventDay.toString() + "/" + event.eventMonth.toString() + " at " + event.time
+        val tvDescription = eventDetailsDialog.findViewById<TextView>(R.id.tv_dilaog_description)
+        tvDescription.text = tvDescription.text.toString() + " " + event.description
+        val googleBtn = eventDetailsDialog.findViewById<ImageButton>(R.id.ib_dialog_google)
+        googleBtn.setOnClickListener{
             openGoogleCalendar(event)
         }
-        eventDetailsDialog.ib_dialog_update.setOnClickListener {
+        val updateBtn = eventDetailsDialog.findViewById<ImageButton>(R.id.ib_dialog_update)
+        updateBtn.setOnClickListener {
             createEventUpdateDetailsDialog(event,position)
             eventDetailsDialog.dismiss()
         }
-        eventDetailsDialog.ib_dialog_delete.setOnClickListener {
+        val cancelBtn = eventDetailsDialog.findViewById<ImageButton>(R.id.ib_dialog_delete)
+        cancelBtn.setOnClickListener {
             showAlertDialog("Cancel Event","Are you sure you want to cancel this event ?",event.id,position)
         }
         eventDetailsDialog.setCancelable(true)
@@ -125,29 +145,43 @@ class EventListAdapter(
         alertDialog.show()
     }
     private fun createEventUpdateDetailsDialog(event: Event,position: Int){
-
         updateEventDialog = Dialog(context)
         updateEventDialog.setContentView(R.layout.dialog_update_event_details)
-        updateEventDialog.tie_updateDetails_subject.setText(event.subject)
-        updateEventDialog.tie_updateDetails_description.setText(event.description)
-        updateEventDialog.tie_updateDetails_duration.setText(event.duration.toString())
-        updateEventDialog.tie_updateDetails_participants.setText(event.participants)
-        updateEventDialog.ib_updateEvent_update.setOnClickListener {
-            val eventHashMap = HashMap<String,Any>()
-            eventHashMap["subject"] = updateEventDialog.tie_updateDetails_subject.text.toString()
-            eventHashMap["description"] = updateEventDialog.tie_updateDetails_description.text.toString()
-            eventHashMap["participants"] = updateEventDialog.tie_updateDetails_participants.text.toString()
-            eventHashMap["duration"] = updateEventDialog.tie_updateDetails_duration.text.toString().toDouble()
-            eventHashMap["frequency"] = updateEventDialog.spinner_updateDetails_freq.selectedItem.toString()
-            eventHashMap["priority"]  = updateEventDialog.spinner_updateDetails_priority.selectedItem.toString()
-            eventHashMap["type"] = updateEventDialog.spinner_updateDetails_type.selectedItem.toString()
-            fragment.showProgressDialog("Loading..")
-            updateEventDialog.dismiss()
-            events.get(position).type = updateEventDialog.spinner_updateDetails_type.selectedItem.toString()
-            notifyItemChanged(position)
-            FirestoreClass().updateEvent(eventHashMap,event.id, fragment.requireActivity() as BaseActivity,fragment)
-
+        val tieSubject = updateEventDialog.findViewById<TextInputEditText>(R.id.tie_updateDetails_subject)
+        tieSubject.setText(event.subject)
+        val tieDescription = updateEventDialog.findViewById<TextInputEditText>(R.id.tie_updateDetails_description)
+        tieDescription.setText(event.description)
+        val pickTimeStart = updateEventDialog.findViewById<Button>(R.id.btn_updateDetails_pickTime_start)
+        pickTimeStart.text = event.time.subSequence(0,5).toString()
+        val tiePreparingDuration = updateEventDialog.findViewById<TextInputEditText>(R.id.tie_updateDetails_preparing)
+        tiePreparingDuration.setText(event.preparingDuration.toString())
+        pickTimeStart.setOnClickListener {
+            calendarStart = Calendar.getInstance()
+            val timeSetListener = TimePickerDialog.OnTimeSetListener{ timePicker, hour, minute ->
+                calendarStart.set(Calendar.HOUR_OF_DAY,hour)
+                calendarStart.set(Calendar.MINUTE,minute)
+                pickTimeStart.text = SimpleDateFormat("HH:mm").format(calendarStart.time)
+            }
+            TimePickerDialog(context,timeSetListener,calendarStart.get(Calendar.HOUR_OF_DAY),calendarStart.get(
+                Calendar.MINUTE),true).show()
         }
+        val pickTimeEnd = updateEventDialog.findViewById<Button>(R.id.btn_updateDetails_pickTime_end)
+        pickTimeEnd.text = event.time.subSequence(6,11).toString()
+        pickTimeEnd.setOnClickListener {
+            calendarEnd = Calendar.getInstance()
+            val timeSetListener = TimePickerDialog.OnTimeSetListener{ timePicker, hour, minute ->
+                calendarEnd.set(Calendar.HOUR_OF_DAY,hour)
+                calendarEnd.set(Calendar.MINUTE,minute)
+                pickTimeEnd.text = SimpleDateFormat("HH:mm").format(calendarEnd.time)
+            }
+            TimePickerDialog(context,timeSetListener,calendarEnd.get(Calendar.HOUR_OF_DAY),calendarEnd.get(
+                Calendar.MINUTE),true).show()
+        }
+
+        val tieParticipants = updateEventDialog.findViewById<TextInputEditText>(R.id.tie_updateDetails_participants)
+        tieParticipants.setText(event.participants)
+        val updateBtn = updateEventDialog.findViewById<ImageButton>(R.id.ib_updateEvent_update)
+
         prioritySpinner = updateEventDialog.findViewById(R.id.spinner_updateDetails_priority)
         ArrayAdapter.createFromResource(
             updateEventDialog.context,
@@ -169,16 +203,34 @@ class EventListAdapter(
             eventTypesSpinner.adapter = adapter
             eventTypesSpinner.setSelection(adapter.getPosition(event.type))
         }
-        freqsTypesSpinner = updateEventDialog.findViewById(R.id.spinner_updateDetails_freq)
-        ArrayAdapter.createFromResource(
-            updateEventDialog.context,
-            R.array.freqs_spinner_items,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.select_dialog_item)
-            freqsTypesSpinner.adapter = adapter
-            freqsTypesSpinner.setSelection(adapter.getPosition(event.frequency))
+
+        updateBtn.setOnClickListener {
+            val duration = ((calendarEnd.get(Calendar.HOUR_OF_DAY) - calendarStart.get(Calendar.HOUR_OF_DAY)) * 60) + (calendarEnd.get(Calendar.MINUTE) - calendarStart.get(Calendar.MINUTE))
+            val eventHashMap = HashMap<String,Any>()
+            eventHashMap["subject"] = tieSubject.text.toString()
+            eventHashMap["description"] = tieDescription.text.toString()
+            eventHashMap["participants"] = tieParticipants.text.toString()
+            eventHashMap["preparingDuration"] = tiePreparingDuration.text.toString().toDouble()
+            eventHashMap["priority"]  = prioritySpinner.selectedItem.toString()
+            eventHashMap["type"] = eventTypesSpinner.selectedItem.toString()
+            eventHashMap["time"] = SimpleDateFormat("HH:mm").format(calendarStart.time) + "-" + SimpleDateFormat("HH:mm").format(calendarEnd.time)
+            eventHashMap["duration"] = duration.toDouble()
+            fragment.showProgressDialog("Loading..")
+            updateEventDialog.dismiss()
+            events[position].type = eventTypesSpinner.selectedItem.toString()
+            events[position].time = SimpleDateFormat("HH:mm").format(calendarStart.time) + "-" + SimpleDateFormat("HH:mm").format(calendarEnd.time)
+            events[position].participants = tieParticipants.text.toString()
+            events[position].preparingDuration = tiePreparingDuration.text.toString().toDouble()
+            events[position].subject = tieSubject.text.toString()
+            events[position].description = tieDescription.text.toString()
+            events[position].duration = duration.toDouble()
+            events[position].priority = prioritySpinner.selectedItem.toString()
+
+            notifyItemChanged(position)
+            FirestoreClass().updateEvent(eventHashMap,event.id, fragment.requireActivity() as BaseActivity,fragment)
+
         }
+
         updateEventDialog.setCancelable(true)
         updateEventDialog.setCanceledOnTouchOutside(true)
         updateEventDialog.show()
