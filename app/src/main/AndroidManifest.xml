@@ -42,6 +42,11 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
+            android:name=".activities.AddEventActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/Theme.LawTechApp.NoActionBar">
+        </activity>
+        <activity
             android:name=".activities.LoginActivity"
             android:exported="true"
             android:screenOrientation="fullSensor"

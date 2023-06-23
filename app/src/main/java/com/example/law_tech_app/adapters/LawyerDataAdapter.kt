@@ -29,7 +29,7 @@ class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerDa
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = lawyersList[position]
         if (model.imgUrl!=""){
-            GlideLoader(context).loadLawyerPicture(model.imgUrl,holder.itemView.iv_lawyer_image)
+            GlideLoader(context).loadPicture(model.imgUrl as Any,holder.itemView.iv_lawyer_image)
             holder.itemView.tv_lawyer_name.text = model.name
             holder.itemView.tv_lawyer_about.text = model.about
             val isExpandable: Boolean = model.isExpandable

@@ -5,20 +5,19 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.fragment.app.Fragment
-import com.example.law_tech_app.activities.ClientMainActivity
-import com.example.law_tech_app.activities.LawyerMainActivity
-import com.example.law_tech_app.activities.LoginActivity
-import com.example.law_tech_app.activities.SignUpActivity
+import com.example.law_tech_app.activities.*
+import com.example.law_tech_app.adapters.MessagesListAdapter
 import com.example.law_tech_app.fragments.*
-import com.example.law_tech_app.models.Client
-import com.example.law_tech_app.models.Lawyer
-import com.example.law_tech_app.models.User
+import com.example.law_tech_app.models.*
 import com.example.law_tech_app.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.delay
 
 
 ///**
@@ -27,15 +26,15 @@ import com.google.firebase.ktx.Firebase
 class FirestoreClass {
 
     // Access a Cloud Firestore instance.
-     val mFireStore = Firebase.firestore
+    val mFireStore = Firebase.firestore
 
-//
+    //
 //    /**
 //     * A function to make an entry of the registered user in the FireStore database.
 //     */
     fun registerUser(activity: SignUpActivity,UserInfo: User) {
 
-    // The "users" is collection name. If the collection is already created then it will not create the same one again.
+        // The "users" is collection name. If the collection is already created then it will not create the same one again.
         mFireStore.collection(UserInfo.toString())
             // Document ID for users fields. Here the document it is the User ID.
             .document(UserInfo.uid)
@@ -43,8 +42,8 @@ class FirestoreClass {
             .set(UserInfo,SetOptions.merge())
             .addOnSuccessListener {
                 // Here call a function of base activity for transferring the result to it.
-              if (UserInfo.toString() == Constants.LAWYERS)
-                  activity.lawyerSignUpSuccess()
+                if (UserInfo.toString() == Constants.LAWYERS)
+                    activity.lawyerSignUpSuccess()
                 else activity.clientSignUpSuccess()
 
             }
@@ -71,7 +70,7 @@ class FirestoreClass {
         }
         return currentUserID
     }
-//
+    //
 //    /**
 //     * A function to get the logged user details from from FireStore Database.
 //     */
@@ -123,16 +122,18 @@ class FirestoreClass {
                             fragment.loadUserDetails(currentUser as Lawyer)
                         }
                         if (fragment !=null && (fragment is LawyerNotificationsFragment)){
-                            fragment.loadingMessagesSuccess((currentUser as Lawyer).messages)
+                            fragment.loadingUserDetails(currentUser as Lawyer)
+
                         }
                     }
 
-                    is ClientMainActivity ->{
+                    is ClientMainActivity->{
                         if (fragment != null && (fragment is ClientProfileFragment)){
                             fragment.loadUserDetails(currentUser as Client)
                         }
                         if (fragment !=null && (fragment is ClientNotificationsFragment)){
-                            fragment.loadingMessagesSuccess((currentUser as Client).messages)
+                            fragment.loadingUserDetails(currentUser as Client)
+
                         }
                     }
                 }
@@ -157,20 +158,224 @@ class FirestoreClass {
                     e
                 )
             }
-   }
+    }
+    fun getNotificationsFromFirestore(fragment: Fragment? = null){
+        mFireStore.collection(Constants.MESSAGES)
+            .whereEqualTo("receiver",getCurrentUserID())
+            .get()
+            .addOnSuccessListener {
+                    documents->
+                val messages = ArrayList<Message>()
+                for(document in documents.documents){
+                    val message = document.toObject(Message::class.java)!!
+                    messages.add(message)
+                }
+                if (fragment !=null && ((fragment is ClientNotificationsFragment))){
+                    fragment.loadingMessagesSuccess(messages)
+                }
 
-    fun updateCurrentUserDetails(currentUserHashMap:HashMap<String,Any>,collection:String){
+            }.addOnFailureListener {
+//                    e-> Log.e("matan",e.toString())
+            }
+    }
+    fun getEventsFromFirestore(fragment: Fragment? = null,day:Int,month:Int){
+        mFireStore.collection(Constants.EVENTS)
+            .whereEqualTo("owner",getCurrentUserID())
+            .whereEqualTo("eventDay",day)
+            .whereEqualTo("eventMonth",month)
+            .get()
+            .addOnSuccessListener {
+                    documents->
+                val events = ArrayList<Event>()
+                for(document in documents.documents){
+                    val event = document.toObject(Event::class.java)!!
+                    events.add(event)
+                }
+                if (fragment !=null && (fragment is LawyerCalendarFragment)){
+                    fragment.loadingEventsSuccess(events)
+                }
+
+            }.addOnFailureListener {
+                    e-> Log.e("matan",e.toString())
+            }
+    }
+    fun updateCurrentUserDetails(currentUserHashMap:HashMap<String,Any>,collection:String,fragment: BaseFragment?){
         mFireStore.collection(collection)
             .document(getCurrentUserID()).update(currentUserHashMap)
             .addOnSuccessListener {
-
+                when(fragment){
+                    is LawyerProfileFragment->{
+                        fragment.updateCurrentUserDetailsSuccess()
+                    }
+                    is ClientProfileFragment->{
+                        fragment.updateCurrentUserDetailsSuccess()
+                    }
+                    is LawyerNotificationsFragment->{
+                        fragment.blockUserSuccess()
+                    }
+                }
             }.addOnFailureListener{
 
             }
 
+    }
+    fun updateEvent(eventHashMap: HashMap<String,Any>, id:String,activity: BaseActivity,fragment: BaseFragment?){
+        mFireStore.collection(Constants.EVENTS)
+            .document(id).update(eventHashMap)
+            .addOnSuccessListener {
+                when(activity){
+                    is AddEventActivity->{
+                        activity.addEventSuccess()
+                    }
+                    is LawyerMainActivity ->{
+                        if (fragment != null && (fragment is LawyerCalendarFragment)) {
+                            fragment.updateEventSuccess()
+                        }
+                    }
 
+                }
+            }.addOnFailureListener {
+                activity.hideProgressDialog()
+            }
+    }
+    fun addEventToFirestore(event:Event,activity: AddEventActivity){
+        mFireStore.collection(Constants.EVENTS)
+            .add(event).addOnSuccessListener{
+                    documentReference->
+                documentReference.get()
+                    .addOnSuccessListener {
+                            document->
+                        val event = document.toObject(Event::class.java)
+                        if (event != null)
+                        {
+                            val eventHashMap = HashMap<String,Any>()
+                            eventHashMap["id"] = documentReference.id
+                            updateEvent(eventHashMap,documentReference.id,activity,null)
+                        }
+                    }.addOnFailureListener {
+                            e->e.printStackTrace()
+
+                    }
+            }.addOnFailureListener {
+                    e->e.printStackTrace()
+            }
+    }
+    fun deleteEventFromFirestore(id: String,fragment: BaseFragment){
+        mFireStore.collection(Constants.EVENTS)
+            .document(id).delete()
+            .addOnSuccessListener {
+                when(fragment){
+                    is LawyerCalendarFragment->{
+                        fragment.deleteEventSuccess()
+                    }
+                }
+            }.addOnFailureListener {
+                fragment.hideProgressDialog()
+            }
+    }
+
+    private fun updateMessage(messageHashMap: HashMap<String,Any>, id:String, fragment: BaseFragment){
+        mFireStore.collection(Constants.MESSAGES)
+            .document(id).update(messageHashMap)
+            .addOnSuccessListener {
+                when(fragment){
+                    is LawyerNotificationsFragment->{
+                        fragment.addMessageSuccess()
+                    }
+                    is ClientNotificationsFragment->{
+                        fragment.addMessageSuccess()
+                    }
+                }
+            }.addOnFailureListener {
+                when(fragment){
+                    is LawyerNotificationsFragment->{
+                        fragment.hideProgressDialog()
+                    }
+                    is ClientNotificationsFragment->{
+                        fragment.hideProgressDialog()
+                    }
+                }
+            }
+
+    }
+    fun deleteMessageFromFirestore(id: String,fragment: BaseFragment){
+        mFireStore.collection(Constants.MESSAGES)
+            .document(id).delete()
+            .addOnSuccessListener {
+                when(fragment){
+                    is LawyerNotificationsFragment->{
+                        fragment.deleteMessageSuccess()
+                    }
+                    is ClientNotificationsFragment->{
+                        fragment.deleteMessageSuccess()
+                    }
+                }
+            }.addOnFailureListener {
+                fragment.hideProgressDialog()
+            }
     }
     fun getCollectionData(collectionName: String): CollectionReference {
         return mFireStore.collection(collectionName)
+    }
 
-    }}
+    fun getUserFromFirestore(uid: String,collectionName: String,adapter: MessagesListAdapter)
+    {
+
+        mFireStore.collection(collectionName)
+            .document(uid).get()
+            .addOnSuccessListener { document ->
+                val user: User? = if (document.exists()) {
+                    when (collectionName) {
+                        Constants.LAWYERS -> {
+                            document.toObject(Lawyer::class.java)!!
+                        }
+                        else -> {
+                            document.toObject(Client::class.java)!!
+                        }
+                    }
+                } else {
+                    null
+                }
+                adapter.createUserProfileDialog(user!!)
+            }
+    }
+
+    fun addMessageToFirestore(message:Message, fragment: BaseFragment)
+    {
+        mFireStore.collection(Constants.MESSAGES)
+            .add(message).addOnSuccessListener{
+                    documentReference->
+                documentReference.get()
+                    .addOnSuccessListener {
+                            document->
+                        val msg = document.toObject(Message::class.java)
+                        if (msg != null)
+                        {
+                            val messageHashMap = HashMap<String,Any>()
+                            messageHashMap["id"] = documentReference.id
+                            updateMessage(messageHashMap,documentReference.id,fragment)
+
+                        }
+                    }.addOnFailureListener {
+                        when(fragment){
+                            is LawyerNotificationsFragment->{
+                                fragment.hideProgressDialog()
+                            }
+                            is ClientNotificationsFragment->{
+                                fragment.hideProgressDialog()
+                            }
+                        }
+                    }
+            }.addOnFailureListener {
+
+                when(fragment){
+                    is LawyerNotificationsFragment->{
+                        fragment.hideProgressDialog()
+                    }
+                    is ClientNotificationsFragment->{
+                        fragment.hideProgressDialog()
+                    }
+                }
+            }
+    }
+}

@@ -3,6 +3,7 @@ package com.example.law_tech_app.activities
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -41,7 +42,6 @@ class ClientMainActivity : BaseActivity() {
         setupActionBarWithNavController(navController,appBarConfiguration)
         navView.setupWithNavController(navController)
     }
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
         super.onActivityResult(requestCode, resultCode, data)
@@ -58,7 +58,8 @@ class ClientMainActivity : BaseActivity() {
                                 currentUserHashMap[Constants.IMAGE_URL] = url.toString()
                                 FirestoreClass().updateCurrentUserDetails(
                                     currentUserHashMap,
-                                    Constants.CLIENTS
+                                    Constants.CLIENTS,
+                                    null
                                 )
 
                             }
@@ -72,7 +73,8 @@ class ClientMainActivity : BaseActivity() {
             }else if(requestCode == Constants.IMAGE_REQUEST_CODE){
                 if (data !=null && data.extras !=null)
                 {
-                    //TODO figure out how to set the profile picture
+                    Log.e("matan", data.data.toString())
+
                 }
             }
         }

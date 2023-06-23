@@ -3,7 +3,6 @@ package com.example.law_tech_app.adapters
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
 import com.example.law_tech_app.fragments.BaseFragment
-import com.example.law_tech_app.models.Client
 import com.example.law_tech_app.models.Lawyer
 import com.example.law_tech_app.models.Message
 import com.example.law_tech_app.models.User
@@ -51,7 +49,7 @@ class MessagesListAdapter(
         if (holder is MyViewHolder)
         {
 
-            GlideLoader(context).loadSenderPicture(message.senderImageURL,holder.itemView.iv_sender_image)
+            GlideLoader(context).loadPicture(message.senderImageURL,holder.itemView.iv_sender_image)
             holder.itemView.tv_messageDetailsActivity_subject.text = " Subject:" + " " + message.subject
             holder.itemView.tv_messageDetailsActivity_sender.text = " Sender:" + " " + message.senderFullname
             holder.itemView.tv_messageDetailsActivity_time.text = " " + message.date
