@@ -5,8 +5,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.example.law_tech_app.activities.*
 import com.example.law_tech_app.adapters.MessagesListAdapter
+import com.example.law_tech_app.adapters.MessagesListAdapterClient
 import com.example.law_tech_app.fragments.*
 import com.example.law_tech_app.models.*
 import com.example.law_tech_app.utils.Constants
@@ -318,7 +320,7 @@ class FirestoreClass {
         return mFireStore.collection(collectionName)
     }
 
-    fun getUserFromFirestore(uid: String,collectionName: String,adapter: MessagesListAdapter)
+    fun getUserFromFirestore(uid: String,collectionName: String,adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>)
     {
 
         mFireStore.collection(collectionName)
@@ -336,7 +338,8 @@ class FirestoreClass {
                 } else {
                     null
                 }
-                adapter.createUserProfileDialog(user!!)
+                if (adapter is MessagesListAdapter)
+                    adapter.createUserProfileDialog(user!!)
             }
     }
 
