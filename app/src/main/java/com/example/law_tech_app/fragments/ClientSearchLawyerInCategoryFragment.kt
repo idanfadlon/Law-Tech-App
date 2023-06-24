@@ -19,6 +19,8 @@ import com.example.law_tech_app.R
 import com.example.law_tech_app.adapters.CategoryAdapter
 import com.example.law_tech_app.adapters.LawyerDataAdapter
 import com.example.law_tech_app.databinding.SpecializationItemBinding
+import com.example.law_tech_app.models.Client
+import com.example.law_tech_app.models.Lawyer
 import com.example.law_tech_app.utils.Constants
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,6 +36,7 @@ import kotlin.collections.ArrayList
 
 
 class ClientSearchLawyerInCategoryFragment :BaseFragment() {
+    lateinit var currentUser:Client
     private var lawyersList = ArrayList<LawyerData>()
     private lateinit var lawyersAdapter:LawyerDataAdapter
 
@@ -66,8 +69,8 @@ class ClientSearchLawyerInCategoryFragment :BaseFragment() {
                     }
                     rv_search_lawyer_in_category.layoutManager = LinearLayoutManager(activity)
                     rv_search_lawyer_in_category.setHasFixedSize(true)
-                    Log.e("list len", lawyersList.size.toString())
-                    lawyersAdapter = LawyerDataAdapter(requireActivity(),lawyersList)
+                    loadingUserDetails(currentUser)
+                    lawyersAdapter = LawyerDataAdapter(requireActivity(),lawyersList,currentUser,this)
 
                     rv_search_lawyer_in_category.adapter = lawyersAdapter
                     sv_search_lawyer_in_category.setOnQueryTextListener(object :SearchView.OnQueryTextListener,
@@ -95,6 +98,11 @@ class ClientSearchLawyerInCategoryFragment :BaseFragment() {
 
     }
 
+
+    fun loadingUserDetails(currentuser: Client){
+        currentUser = currentuser
+        FirestoreClass().getNotificationsFromFirestore(this@ClientSearchLawyerInCategoryFragment)
+    }
      fun loadData(specialization: String){
         addDataToList(specialization) //TODO: get from cardView
 
