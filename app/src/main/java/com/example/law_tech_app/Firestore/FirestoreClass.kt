@@ -94,6 +94,7 @@ class FirestoreClass {
                     when (collectionName) {
                         Constants.LAWYERS -> {
                             document.toObject(Lawyer::class.java)!!
+
                         }
                         else -> {
                             document.toObject(Client::class.java)!!

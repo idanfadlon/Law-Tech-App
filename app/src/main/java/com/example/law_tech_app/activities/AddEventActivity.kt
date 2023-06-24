@@ -28,6 +28,7 @@ class AddEventActivity : BaseActivity() {
     lateinit var typesSpinner:Spinner
     lateinit var prioritySpinner:Spinner
     lateinit var addBtn:ImageButton
+    lateinit var cancelBtn:ImageButton
     lateinit var currentDayAndMonth:ArrayList<Int>
     lateinit var pickTimeEnd:Button
     lateinit var pickTimeStart:Button
@@ -52,6 +53,11 @@ class AddEventActivity : BaseActivity() {
                 addEventToFirestore()
             }
         }
+        cancelBtn = findViewById(R.id.ib_addEvent_cancel)
+        cancelBtn.setOnClickListener {
+            onBackPressed()
+            finish()
+        }
         pickTimeStart = findViewById(R.id.btn_addEvent_pickTime_start)
         pickTimeStart.setOnClickListener {
             calendarStart = Calendar.getInstance()
@@ -60,7 +66,8 @@ class AddEventActivity : BaseActivity() {
                 calendarStart.set(Calendar.MINUTE,minute)
                 pickTimeStart.text = SimpleDateFormat("HH:mm").format(calendarStart.time)
             }
-            TimePickerDialog(this,timeSetListener,calendarStart.get(Calendar.HOUR_OF_DAY),calendarStart.get(Calendar.MINUTE),true).show()
+            TimePickerDialog(this,R.style.TimePickerTheme,timeSetListener,calendarStart.get(Calendar.HOUR_OF_DAY),calendarStart.get(Calendar.MINUTE),true).show()
+
         }
         pickTimeEnd = findViewById(R.id.btn_addEvent_pickTime_end)
         pickTimeEnd.setOnClickListener {
@@ -70,7 +77,7 @@ class AddEventActivity : BaseActivity() {
                 calendarEnd.set(Calendar.MINUTE,minute)
                 pickTimeEnd.text = SimpleDateFormat("HH:mm").format(calendarEnd.time)
             }
-            TimePickerDialog(this,timeSetListener,calendarEnd.get(Calendar.HOUR_OF_DAY),calendarEnd.get(Calendar.MINUTE),true).show()
+            TimePickerDialog(this,R.style.TimePickerTheme,timeSetListener,calendarEnd.get(Calendar.HOUR_OF_DAY),calendarEnd.get(Calendar.MINUTE),true).show()
         }
 
         ArrayAdapter.createFromResource(
@@ -111,6 +118,7 @@ class AddEventActivity : BaseActivity() {
         FirestoreClass().addEventToFirestore(event,this)
 
     }
+
     fun addEventSuccess(){
         hideProgressDialog()
         val intent = Intent(this,LawyerMainActivity::class.java)

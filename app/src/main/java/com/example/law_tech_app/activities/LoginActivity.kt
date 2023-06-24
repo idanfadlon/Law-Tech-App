@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
@@ -22,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 class LoginActivity: BaseActivity() {
     lateinit var tie_email: TextInputEditText
     lateinit var tie_password: TextInputEditText
+    lateinit var tie_license:TextInputEditText
     lateinit var login_btn:Button
     lateinit var forgotPasswordTv:TextView
     lateinit var tvRegister:TextView
@@ -48,6 +50,8 @@ class LoginActivity: BaseActivity() {
         tie_email.hint=("Email")
         tie_password = findViewById(R.id.tie_password)
         tie_password.hint=("Password")
+        tie_license = findViewById(R.id.tie_license)
+        tie_license.hint = "License number"
         login_btn = findViewById(R.id.btn_login)
         login_btn.setOnClickListener {
             logInRegisteredUser()
@@ -66,10 +70,13 @@ class LoginActivity: BaseActivity() {
     }
 
 private fun onRadioClick(id:Int){
-    if(id== R.id.rb_client)
+    if(id== R.id.rb_client) {
         tie_email.hint = "Email"
+        tie_license.visibility = View.GONE
+    }
     else {
-        tie_email.hint = "License Number"
+        tie_email.hint = "Email"
+        tie_license.visibility = View.VISIBLE
     }
     }
 //    fun checkCurrentUserType(uid:String):Boolean{
@@ -96,15 +103,24 @@ private fun onRadioClick(id:Int){
 
         if (currentUser != null)
         {
-
             when(currentUser.toString())
             {
                 Constants.LAWYERS -> {
+                    if ((currentUser as Lawyer).licenseNumber.equals(tie_license.text.toString())){
                     hideProgressDialog()
                     val intent = Intent(this@LoginActivity, LawyerMainActivity::class.java)
                     intent.putExtra(Constants.CURRENT_EXTRA_USER_DETAILS, currentUser as Lawyer)
                     startActivity(intent)
                     finish()
+                    }else {
+                        hideProgressDialog()
+                        showErrorSnackBar(
+                            "License number is not corresponding the registered lawyer",
+                            true
+                        )
+
+                    }
+
                 }
                 else -> {
                     hideProgressDialog()
