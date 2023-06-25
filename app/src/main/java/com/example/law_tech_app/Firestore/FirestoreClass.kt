@@ -7,14 +7,13 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.law_tech_app.activities.*
+import com.example.law_tech_app.adapters.LawyerDataAdapter
 import com.example.law_tech_app.adapters.MessagesListAdapter
-import com.example.law_tech_app.adapters.MessagesListAdapterClient
 import com.example.law_tech_app.fragments.*
 import com.example.law_tech_app.models.*
 import com.example.law_tech_app.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -134,6 +133,10 @@ class FirestoreClass {
                             fragment.loadUserDetails(currentUser as Client)
                         }
                         if (fragment !=null && (fragment is ClientNotificationsFragment)){
+                            fragment.loadingUserDetails(currentUser as Client)
+
+                        }
+                        if (fragment !=null && (fragment is ClientSearchLawyerInCategoryFragment)){
                             fragment.loadingUserDetails(currentUser as Client)
 
                         }

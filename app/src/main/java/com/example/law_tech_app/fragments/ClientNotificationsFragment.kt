@@ -1,23 +1,19 @@
 package com.example.law_tech_app.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
-import com.example.law_tech_app.adapters.MessagesListAdapter
+import com.example.law_tech_app.adapters.MessagesListAdapterClient
 import com.example.law_tech_app.models.Client
 import com.example.law_tech_app.models.Message
 import com.example.law_tech_app.utils.Constants
 import kotlinx.android.synthetic.main.fragment_client_notifications.*
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -60,8 +56,7 @@ class ClientNotificationsFragment :BaseFragment() {
             tvNoFound.visibility = View.GONE
             recyclerView.layoutManager = LinearLayoutManager(activity)
             recyclerView.setHasFixedSize(true)
-            //TODO: Write new messageslist Adapter for client
-            val messagesListAdapter = MessagesListAdapter(requireActivity(),messages,currentUser,this)
+            val messagesListAdapter = MessagesListAdapterClient(requireActivity(),messages,currentUser,this)
             rv_client_notifications.adapter = messagesListAdapter
         }else{
             recyclerView.visibility = View.GONE

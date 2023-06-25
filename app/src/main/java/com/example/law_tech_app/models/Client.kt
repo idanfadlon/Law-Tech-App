@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 @Parcelize
 open class Client (
-    override val uid:String ="",
+    override var uid:String ="",
     override val fullName:String = "",
     override val email:String = "",
     override val phoneNumber:String = "",

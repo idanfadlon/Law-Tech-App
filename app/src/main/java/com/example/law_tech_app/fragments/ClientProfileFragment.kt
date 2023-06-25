@@ -5,12 +5,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.*
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -20,7 +17,6 @@ import com.example.law_tech_app.R
 import com.example.law_tech_app.activities.BaseActivity
 import com.example.law_tech_app.activities.LoginActivity
 import com.example.law_tech_app.models.Client
-import com.example.law_tech_app.models.Lawyer
 import com.example.law_tech_app.utils.Constants
 import com.example.law_tech_app.utils.GlideLoader
 import com.google.android.material.textfield.TextInputEditText

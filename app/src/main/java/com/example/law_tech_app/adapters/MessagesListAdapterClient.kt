@@ -141,7 +141,6 @@ class MessagesListAdapterClient(
         messageDetailsDialog.tv_dialog_messageDetails_sender.text =messageDetailsDialog.tv_dialog_messageDetails_sender.text.toString() + " " + message.senderFullname
         messageDetailsDialog.tv_dialog_messageDetails_body.text = messageDetailsDialog.tv_dialog_messageDetails_body.text.toString() + " " + message.messageBody
         messageDetailsDialog.tv_dialog_messageDetails_reply.text = messageDetailsDialog.tv_dialog_messageDetails_reply.text.toString() + " " + message.senderFullname
-        messageDetailsDialog.tv_dialog_messageDetails_watch.text = "Watch " + message.senderFullname + "'s profile"
         GlideLoader(messageDetailsDialog.context).loadCurrentUserPicture(message.senderImageURL,messageDetailsDialog.iv_messageDetails_img)
         messageDetailsDialog.ib_dialog_messageDetails_reply.setOnClickListener {
             messageDetailsDialog.dismiss()

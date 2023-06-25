@@ -34,8 +34,6 @@ class CategoryAdapter(val context: Context, var cList:ArrayList<CategoryData>): 
         holder.itemView.tv_title.text = model.title
         holder.itemView.iv_category_icon.setImageResource(model.icon)
         holder.itemView.cardView.setOnClickListener {
-            Log.e("cardClick","card clicked category is" + model.title)
-            //TODO: Check tomorrow
             val fragment =ClientSearchLawyerInCategoryFragment()
             val bundle = Bundle()
             bundle.putString("lawyerCategory",model.title)

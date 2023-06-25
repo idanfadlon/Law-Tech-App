@@ -51,50 +51,51 @@ class ClientSearchLawyerInCategoryFragment :BaseFragment() {
     }
 
     private fun addDataToList(specialization: String){
-            val firebase = FirestoreClass()
-            val lawyersCollection = firebase.getCollectionData("/lawyers")
-            val query = lawyersCollection.whereEqualTo("specialization", specialization)
+        val firebase = FirestoreClass()
+        val lawyersCollection = firebase.getCollectionData("/lawyers")
+        val query = lawyersCollection.whereEqualTo("specialization", specialization)
 
-            query.get().addOnCompleteListener{task ->
-                if(task.isSuccessful){
-                    for (document in task.result) {
-                        val lawyerName = document.getString("fullName")
-                        val lawyerImage = document.getString("imageURL")
-                        val lawyerAbout = document.getString("aboutMe")
-                        if(lawyersList.contains(LawyerData(lawyerName, lawyerImage, lawyerAbout)))
-                            continue
-                        else {
-                            lawyersList.add(LawyerData(lawyerName, lawyerImage, lawyerAbout))
-                        }
+        query.get().addOnCompleteListener{task ->
+            if(task.isSuccessful){
+                for (document in task.result) {
+                    val lawyerName = document.getString("fullName")
+                    val lawyerImage = document.getString("imageURL")
+                    val lawyerAbout = document.getString("aboutMe")
+                    val lawyerId = document.id
+                    if(lawyersList.contains(LawyerData(lawyerName, lawyerImage, lawyerAbout,lawyerId)))
+                        continue
+                    else {
+                        lawyersList.add(LawyerData(lawyerName, lawyerImage, lawyerAbout,lawyerId))
                     }
-                    rv_search_lawyer_in_category.layoutManager = LinearLayoutManager(activity)
-                    rv_search_lawyer_in_category.setHasFixedSize(true)
-                    loadingUserDetails(currentUser)
-                    lawyersAdapter = LawyerDataAdapter(requireActivity(),lawyersList,currentUser,this)
-
-                    rv_search_lawyer_in_category.adapter = lawyersAdapter
-                    sv_search_lawyer_in_category.setOnQueryTextListener(object :SearchView.OnQueryTextListener,
-                        androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                        override fun onQueryTextSubmit(query: String?): Boolean {
-
-                            return false
-                        }
-
-                        override fun onQueryTextChange(newText: String?): Boolean {
-                            filterList(newText)
-
-                            return true
-                        }
-
-                    })
-
                 }
-                else{
-                    Log.e("task fail","task fail")
-                }
+                rv_search_lawyer_in_category.layoutManager = LinearLayoutManager(activity)
+                rv_search_lawyer_in_category.setHasFixedSize(true)
+                loadingUserDetails(currentUser)
+                lawyersAdapter = LawyerDataAdapter(requireActivity(),lawyersList,currentUser,this)
 
+                rv_search_lawyer_in_category.adapter = lawyersAdapter
+                sv_search_lawyer_in_category.setOnQueryTextListener(object :SearchView.OnQueryTextListener,
+                    androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+
+                        return false
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        filterList(newText)
+
+                        return true
+                    }
+
+                })
 
             }
+            else{
+                Log.e("task fail","task fail")
+            }
+
+
+        }
 
     }
 
@@ -103,7 +104,7 @@ class ClientSearchLawyerInCategoryFragment :BaseFragment() {
         currentUser = currentuser
         FirestoreClass().getNotificationsFromFirestore(this@ClientSearchLawyerInCategoryFragment)
     }
-     fun loadData(specialization: String){
+    fun loadData(specialization: String){
         addDataToList(specialization) //TODO: get from cardView
 
     }

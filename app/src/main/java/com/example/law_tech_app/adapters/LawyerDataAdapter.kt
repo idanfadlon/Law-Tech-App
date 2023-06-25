@@ -25,6 +25,9 @@ import kotlin.collections.ArrayList
 class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerData>,val currentUser:User, val fragment: BaseFragment
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var sendMessageDialog: Dialog
+    lateinit var lawyerId:String
+    lateinit var clientName:String
+    lateinit var clientImg:String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(context)
@@ -43,6 +46,7 @@ class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerDa
             GlideLoader(context).loadPicture(model.imgUrl as Any,holder.itemView.iv_lawyer_image)
             holder.itemView.tv_lawyer_name.text = model.name
             holder.itemView.tv_lawyer_about.text = model.about
+            lawyerId = model.id.toString()
             val isExpandable: Boolean = model.isExpandable
             holder.itemView.tv_lawyer_about.visibility = if (isExpandable) View.VISIBLE else View.GONE
 
@@ -69,7 +73,7 @@ class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerDa
 
         }
     }
-    private fun createSendMessageDialog(){
+    private fun createSendMessageDialog() {
         sendMessageDialog = Dialog(context)
         sendMessageDialog.setContentView(R.layout.dialog_send_message)
         sendMessageDialog.tv_dialog_sendMessage_title.text = sendMessageDialog.tv_dialog_sendMessage_title.text.toString() + " "
@@ -78,25 +82,39 @@ class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerDa
             val dateFormat = SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z")
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"))
             val today = Calendar.getInstance().time
-            val msg = Message(
-                "",
-                sendMessageDialog.tie_dialog_sendMessage_subject.text.toString(),
-                currentUser.uid,
-                currentUser.fullName,
-                currentUser.imageURL,
-                currentUser.uid,
-                sendMessageDialog.tie_dialog_sendMessage_messageBody.text.toString(),
-                dateFormat.format(today).slice(IntRange(0,21)),
-                false
-            )
-            fragment.showProgressDialog("Loading..")
-            FirestoreClass().addMessageToFirestore(msg,fragment)
-            sendMessageDialog.dismiss()
+            val firebase = FirestoreClass()
+            val clientCollection = firebase.getCollectionData("/clients")
+            val currentUserId = firebase.getCurrentUserID()
+            val query = clientCollection.whereEqualTo("uid",currentUserId )
 
+            query.get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result) {
+                        clientName = document.getString("fullName").toString()
+                        clientImg = document.getString("imageURL").toString()
+
+                    }
+                }
+                val msg = Message(
+                    "",
+                    sendMessageDialog.tie_dialog_sendMessage_subject.text.toString(),
+                    currentUserId,
+                    clientName,
+                    clientImg,
+                    lawyerId,
+                    sendMessageDialog.tie_dialog_sendMessage_messageBody.text.toString(),
+                    dateFormat.format(today).slice(IntRange(0, 21)),
+                    false
+                )
+                fragment.showProgressDialog("Loading..")
+                FirestoreClass().addMessageToFirestore(msg, fragment)
+                sendMessageDialog.dismiss()
+
+            }
+            sendMessageDialog.setCancelable(true)
+            sendMessageDialog.setCanceledOnTouchOutside(true)
+            sendMessageDialog.show()
         }
-        sendMessageDialog.setCancelable(true)
-        sendMessageDialog.setCanceledOnTouchOutside(true)
-        sendMessageDialog.show()
     }
 
 
