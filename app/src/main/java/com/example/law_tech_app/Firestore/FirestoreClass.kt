@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.law_tech_app.activities.*
 import com.example.law_tech_app.adapters.LawyerDataAdapter
 import com.example.law_tech_app.adapters.MessagesListAdapter
+import com.example.law_tech_app.adapters.MessagesListAdapterClient
 import com.example.law_tech_app.fragments.*
 import com.example.law_tech_app.models.*
 import com.example.law_tech_app.utils.Constants
@@ -136,10 +137,10 @@ class FirestoreClass {
                             fragment.loadingUserDetails(currentUser as Client)
 
                         }
-//                        if (fragment !=null && (fragment is ClientSearchLawyerInCategoryFragment)){
-//                            fragment.loadingUserDetails(currentUser as Client)
-//
-//                        }
+                        if (fragment !=null && (fragment is ClientSearchLawyerInCategoryFragment)){
+                            fragment.loadingUserDetails(currentUser as Client)
+
+                        }
                     }
                 }
 
@@ -343,8 +344,12 @@ class FirestoreClass {
                 }
                 if (adapter is MessagesListAdapter)
                     adapter.createUserProfileDialog(user!!)
+                if (adapter is MessagesListAdapterClient)
+                    adapter.createUserProfileDialog(user!!)
             }
+
     }
+
 
     fun addMessageToFirestore(message:Message, fragment: BaseFragment)
     {

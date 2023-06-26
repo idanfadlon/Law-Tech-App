@@ -14,6 +14,7 @@ import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.LawyerData
 import com.example.law_tech_app.R
 import com.example.law_tech_app.fragments.BaseFragment
+import com.example.law_tech_app.models.Client
 import com.example.law_tech_app.models.Message
 import com.example.law_tech_app.models.User
 import com.example.law_tech_app.utils.GlideLoader
@@ -23,7 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerData>,val currentUserId:String, val clientName:String,val clientImg:String,val fragment: BaseFragment
+class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerData>,val currentUser:Client,val fragment: BaseFragment
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var sendMessageDialog: Dialog
     lateinit var lawyerId:String
@@ -92,9 +93,9 @@ class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerDa
             val msg = Message(
                 "",
                 sendMessageDialog.tie_dialog_sendMessage_subject.text.toString(),
-                currentUserId,
-                clientName,
-                clientImg,
+                currentUser.uid,
+                currentUser.fullName,
+                currentUser.imageURL,
                 lawyerId,
                 sendMessageDialog.tie_dialog_sendMessage_messageBody.text.toString(),
                 dateFormat.format(today).slice(IntRange(0, 21)),
