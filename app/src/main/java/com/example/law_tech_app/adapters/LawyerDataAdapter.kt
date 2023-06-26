@@ -103,19 +103,30 @@ class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerDa
             )
             fragment.showProgressDialog("Loading..")
             FirestoreClass().addMessageToFirestore(msg, fragment)
-            Log.e("msg",msg.messageBody)
-            fragment.hideProgressDialog()
+            addMessageSuccess()
             sendMessageDialog.dismiss()
+
+
         }
+
 
 
             sendMessageDialog.setCancelable(true)
             sendMessageDialog.setCanceledOnTouchOutside(true)
             sendMessageDialog.show()
 
+
+
+
     }
 
+    fun addMessageSuccess(){
+        fragment.showErrorSnackBar("Message was sent successfully",false)
+        fragment.hideProgressDialog()
 
+
+
+    }
 
     fun setFilteredList(lawyersList: ArrayList<LawyerData>) {
         this.lawyersList = lawyersList

@@ -149,6 +149,7 @@ class MessagesListAdapterClient(
         }
         sendMessageDialog.setCancelable(true)
         sendMessageDialog.setCanceledOnTouchOutside(true)
+        fragment.hideProgressDialog()
         sendMessageDialog.show()
     }
 
