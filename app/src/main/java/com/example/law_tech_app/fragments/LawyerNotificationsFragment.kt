@@ -58,19 +58,6 @@ class LawyerNotificationsFragment :BaseFragment() {
                 messages.add(msg)
             }
         }
-        messages.add(
-            Message(
-            "",
-            "Just Message for example",
-            "gJznMJ9LcGbT2EdrrFNWVACcH9r2",
-            "Idan Fadlon",
-            "https://firebasestorage.googleapis.com/v0/b/law-tech-app-30499.appspot.com/o/Image%20gJznMJ9LcGbT2EdrrFNWVACcH9r2.jpg?alt=media&token=88620b43-03ee-49ae-86d7-1b61243db206",
-                "hTmpZwqxlFhr5xrvF2BxWsBZM4V2",
-                "Just for example",
-                "Today",
-                false
-        )
-        )
 
         if (messages.size > 0){
             recyclerView.visibility = View.VISIBLE

@@ -110,6 +110,8 @@ class MessagesListAdapter(
             currentUserBlockedList.add(id)
             val hashMap = HashMap<String,Any>()
             hashMap[Constants.BLOCKED_CLIENTS] = currentUserBlockedList
+
+            FirestoreClass().updateCurrentUserDetails(hashMap,Constants.LAWYERS,fragment)
             for(msg in messagesList){
                 if (msg.senderUID == id){
                     messagesList.remove(msg)
@@ -117,8 +119,6 @@ class MessagesListAdapter(
                 }
             }
             notifyDataSetChanged()
-            FirestoreClass().updateCurrentUserDetails(hashMap,Constants.LAWYERS,fragment)
-
         }
         dialogBuilder.setNegativeButton(R.string.no){
                 dialog, _ -> dialog.cancel()
@@ -196,7 +196,7 @@ class MessagesListAdapter(
             val msg = Message(
                 "",
                 tieSubject.text.toString(),
-                currentUser.uid,
+                FirestoreClass().getCurrentUserID(),
                 currentUser.fullName,
                 currentUser.imageURL,
                 message.senderUID,
