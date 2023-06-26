@@ -9,11 +9,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.law_tech_app.R
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.dialog_progress.*
+
 
 
 
@@ -44,7 +45,8 @@ open class BaseFragment : Fragment() {
     fun showProgressDialog(text:String){
         mProgressDialog = Dialog(requireActivity())
         mProgressDialog.setContentView(R.layout.dialog_progress)
-        mProgressDialog.tv_progress_text.text = text
+        val tvText = mProgressDialog.findViewById<TextView>(R.id.tv_progress_text)
+        tvText.text = text
         mProgressDialog.setCancelable(false)
         mProgressDialog.setCanceledOnTouchOutside(false)
         mProgressDialog.show()

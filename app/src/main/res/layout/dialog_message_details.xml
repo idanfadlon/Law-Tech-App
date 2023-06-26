@@ -23,7 +23,7 @@
             android:background="#FFFFFF" />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_messageDetails_img"
+            android:id="@+id/iv_dialog_messageDetails_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="false"

@@ -3,9 +3,14 @@ package com.example.law_tech_app.adapters
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.media.Image
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
@@ -15,10 +20,7 @@ import com.example.law_tech_app.models.Message
 import com.example.law_tech_app.models.User
 import com.example.law_tech_app.utils.Constants
 import com.example.law_tech_app.utils.GlideLoader
-import kotlinx.android.synthetic.main.dialog_message_details.*
-import kotlinx.android.synthetic.main.dialog_send_message.*
-import kotlinx.android.synthetic.main.dialog_user_profile_details.*
-import kotlinx.android.synthetic.main.messages_lawyer_list.view.*
+import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -48,21 +50,27 @@ class MessagesListAdapter(
         val message = messagesList[position]
         if (holder is MyViewHolder)
         {
-
-            GlideLoader(context).loadPicture(message.senderImageURL,holder.itemView.iv_sender_image)
-            holder.itemView.tv_messageDetailsActivity_subject.text = " Subject:" + " " + message.subject
-            holder.itemView.tv_messageDetailsActivity_sender.text = " Sender:" + " " + message.senderFullname
-            holder.itemView.tv_messageDetailsActivity_time.text = " " + message.date
+            val senderImage = holder.itemView.findViewById<ImageView>(R.id.iv_sender_image)
+            GlideLoader(context).loadSenderPicture(message.senderImageURL,senderImage)
+            val tvSubject = holder.itemView.findViewById<TextView>(R.id.tv_message_subject)
+            tvSubject.text = " Subject:" + " " + message.subject
+            val tvSender = holder.itemView.findViewById<TextView>(R.id.tv_message_sender)
+            tvSender.text = " Sender:" + " " + message.senderFullname
+            val tvTime = holder.itemView.findViewById<TextView>(R.id.tv_message_time)
+            tvTime.text = " " + message.date
             holder.itemView.setOnClickListener{
                 createMessageDetailsDialog(message)
             }
-            holder.itemView.iv_icon_reply.setOnClickListener {
+            val ivReply = holder.itemView.findViewById<ImageView>(R.id.iv_icon_reply)
+            ivReply.setOnClickListener {
                 createSendMessageDialog(message)
             }
-            holder.itemView.iv_icon_delete.setOnClickListener {
+            val ivDelete = holder.itemView.findViewById<ImageView>(R.id.iv_icon_delete)
+            ivDelete.setOnClickListener {
                 showDeleteAlertDialog("Delete Message","Are you sure you want to delete this message ?",message.id,position)
             }
-            holder.itemView.iv_sender_image.setOnClickListener {
+
+            senderImage.setOnClickListener {
                 fragment.showProgressDialog("Loading..")
                 FirestoreClass().getUserFromFirestore(message.senderUID,Constants.CLIENTS,this)
             }
@@ -101,15 +109,15 @@ class MessagesListAdapter(
             currentUserBlockedList.add(id)
             val hashMap = HashMap<String,Any>()
             hashMap[Constants.BLOCKED_CLIENTS] = currentUserBlockedList
-            for(message in messagesList){
-                if (message.senderUID == id){
-                    messagesList.remove(message)
+
+            FirestoreClass().updateCurrentUserDetails(hashMap,Constants.LAWYERS,fragment)
+            for(msg in messagesList){
+                if (msg.senderUID == id){
+                    messagesList.remove(msg)
+                    break
                 }
             }
             notifyDataSetChanged()
-            FirestoreClass().updateCurrentUserDetails(hashMap,Constants.LAWYERS,fragment)
-
-
         }
         dialogBuilder.setNegativeButton(R.string.no){
                 dialog, _ -> dialog.cancel()
@@ -119,17 +127,22 @@ class MessagesListAdapter(
     }
 
     fun createUserProfileDialog(user: User){
-
         userProfileDialog = Dialog(context)
         userProfileDialog.setContentView(R.layout.dialog_user_profile_details)
-        GlideLoader(userProfileDialog.context).loadCurrentUserPicture(user!!.imageURL,userProfileDialog.iv_user_profile_details_img)
-        userProfileDialog.tv_user_profile_details_fullname.text = userProfileDialog.tv_user_profile_details_fullname.text.toString() + " " + user!!.fullName
-        userProfileDialog.tv_user_profile_details_email.text =  userProfileDialog.tv_user_profile_details_email.text.toString() + " " + user!!.email
-        userProfileDialog.tv_user_profile_details_phone.text = userProfileDialog.tv_user_profile_details_phone.text.toString() + " " + user!!.phoneNumber
-        userProfileDialog.tv_user_profile_details_block.text = userProfileDialog.tv_user_profile_details_block.text.toString() + " " + user.fullName
-        userProfileDialog.ib_user_profile_details_block.setOnClickListener {
-        showBlockAlertDialog("Block User","Are you sure you want to block " + user!!.fullName +" ?\n\n" +
-        "* Blocking " + user!!.fullName + " will remove all notifications he sent to you *", user!!.uid) }
+        val ivUser = userProfileDialog.findViewById<ImageView>(R.id.iv_user_profile_details_img)
+        GlideLoader(userProfileDialog.context).loadCurrentUserPicture(user.imageURL,ivUser)
+        val tvFullname = userProfileDialog.findViewById<TextView>(R.id.tv_user_profile_details_fullname)
+        tvFullname.text = tvFullname.text.toString() + " " + user!!.fullName
+        val tvEmail = userProfileDialog.findViewById<TextView>(R.id.tv_user_profile_details_email)
+        tvEmail.text =  tvEmail.text.toString() + " " + user.email
+        val tvPhone = userProfileDialog.findViewById<TextView>(R.id.tv_user_profile_details_phone)
+        tvPhone.text = tvPhone.text.toString() + " " + user!!.phoneNumber
+        val tvBlock = userProfileDialog.findViewById<TextView>(R.id.tv_user_profile_details_block)
+        tvBlock.text = tvBlock.text.toString() + " " + user.fullName
+        val blockBtn =  userProfileDialog.findViewById<ImageButton>(R.id.ib_user_profile_details_block)
+        blockBtn.setOnClickListener {
+        showBlockAlertDialog("Block User","Are you sure you want to block " + user.fullName +" ?\n\n" +
+        "* Blocking " + user.fullName + " will remove all notifications he sent to you *", user.uid) }
         userProfileDialog.setCancelable(true)
         userProfileDialog.setCanceledOnTouchOutside(true)
         fragment.hideProgressDialog()
@@ -139,17 +152,25 @@ class MessagesListAdapter(
     private fun createMessageDetailsDialog(message:Message){
         messageDetailsDialog = Dialog(context)
         messageDetailsDialog.setContentView(R.layout.dialog_message_details)
-        messageDetailsDialog.tv_dialog_messageDetails_subject.text = messageDetailsDialog.tv_dialog_messageDetails_subject.text.toString() + " " + message.subject
-        messageDetailsDialog.tv_dialog_messageDetails_sender.text =messageDetailsDialog.tv_dialog_messageDetails_sender.text.toString() + " " + message.senderFullname
-        messageDetailsDialog.tv_dialog_messageDetails_body.text = messageDetailsDialog.tv_dialog_messageDetails_body.text.toString() + " " + message.messageBody
-        messageDetailsDialog.tv_dialog_messageDetails_reply.text = messageDetailsDialog.tv_dialog_messageDetails_reply.text.toString() + " " + message.senderFullname
-        messageDetailsDialog.tv_dialog_messageDetails_watch.text = "Watch " + message.senderFullname + "'s profile"
-        GlideLoader(messageDetailsDialog.context).loadCurrentUserPicture(message.senderImageURL,messageDetailsDialog.iv_messageDetails_img)
-        messageDetailsDialog.ib_dialog_messageDetails_reply.setOnClickListener {
+        val tvSubject = messageDetailsDialog.findViewById<TextView>(R.id.tv_dialog_messageDetails_subject)
+        tvSubject.text = tvSubject.text.toString() + " " + message.subject
+        val tvSender = messageDetailsDialog.findViewById<TextView>(R.id.tv_dialog_messageDetails_sender)
+        tvSender.text =tvSender.text.toString() + " " + message.senderFullname
+        val tvBody = messageDetailsDialog.findViewById<TextView>(R.id.tv_dialog_messageDetails_body)
+        tvBody.text = tvBody.text.toString() + " " + message.messageBody
+        val tvReply = messageDetailsDialog.findViewById<TextView>(R.id.tv_dialog_messageDetails_reply)
+        tvReply.text = tvReply.text.toString() + " " + message.senderFullname
+        val tvWatch = messageDetailsDialog.findViewById<TextView>(R.id.tv_dialog_messageDetails_watch)
+        tvWatch.text = "Watch " + message.senderFullname + "'s profile"
+        val ivSender = messageDetailsDialog.findViewById<ImageView>(R.id.iv_dialog_messageDetails_image)
+        GlideLoader(messageDetailsDialog.context).loadCurrentUserPicture(message.senderImageURL,ivSender)
+        val replyBtn = messageDetailsDialog.findViewById<ImageButton>(R.id.ib_dialog_messageDetails_reply)
+        replyBtn.setOnClickListener {
             messageDetailsDialog.dismiss()
             createSendMessageDialog(message)
         }
-        messageDetailsDialog.ib_dialog_messageDetails_watch.setOnClickListener {
+        val watchBtn = messageDetailsDialog.findViewById<ImageButton>(R.id.ib_dialog_messageDetails_watch)
+        watchBtn.setOnClickListener {
             messageDetailsDialog.dismiss()
             fragment.showProgressDialog("Loading..")
             FirestoreClass().getUserFromFirestore(message.senderUID,Constants.CLIENTS,this)
@@ -161,20 +182,24 @@ class MessagesListAdapter(
     private fun createSendMessageDialog(message:Message){
         sendMessageDialog = Dialog(context)
         sendMessageDialog.setContentView(R.layout.dialog_send_message)
-        sendMessageDialog.tv_dialog_sendMessage_title.text = sendMessageDialog.tv_dialog_sendMessage_title.text.toString() + " " + message.senderFullname
-        sendMessageDialog.tie_dialog_sendMessage_subject.setText("RE: " + message.subject)
-        sendMessageDialog.ib_dialog_sendMessage_send.setOnClickListener {
+        val tvTitle = sendMessageDialog.findViewById<TextView>(R.id.tv_dialog_sendMessage_title)
+        tvTitle.text = tvTitle.text.toString() + " " + message.senderFullname
+        val tieSubject = sendMessageDialog.findViewById<TextInputEditText>(R.id.tie_dialog_sendMessage_subject)
+        tieSubject.setText("RE: " + message.subject)
+        val tieBody = sendMessageDialog.findViewById<TextInputEditText>(R.id.tie_dialog_sendMessage_messageBody)
+        val sendBtn = sendMessageDialog.findViewById<ImageButton>(R.id.ib_dialog_sendMessage_send)
+        sendBtn.setOnClickListener {
             val dateFormat = SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z")
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"))
             val today = Calendar.getInstance().time
             val msg = Message(
                 "",
-                sendMessageDialog.tie_dialog_sendMessage_subject.text.toString(),
-                currentUser.uid,
+                tieSubject.text.toString(),
+                FirestoreClass().getCurrentUserID(),
                 currentUser.fullName,
                 currentUser.imageURL,
                 message.senderUID,
-                sendMessageDialog.tie_dialog_sendMessage_messageBody.text.toString(),
+                tieBody.text.toString(),
                 dateFormat.format(today).slice(IntRange(0,21)),
                 false
             )

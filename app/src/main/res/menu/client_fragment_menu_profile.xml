@@ -5,5 +5,7 @@
         android:id="@+id/icon_edit_profile"
         android:icon="@drawable/edit_profile"
         android:title="Edit profile"
+        android:id="@+id/icon_optimize"
+        android:icon="@drawable/optimize"
         app:showAsAction="always" />
 </menu>

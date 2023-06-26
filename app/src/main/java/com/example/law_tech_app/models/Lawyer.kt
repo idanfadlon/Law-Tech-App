@@ -3,7 +3,7 @@ package com.example.law_tech_app.models
 import android.os.Parcelable
 import com.example.law_tech_app.utils.Constants
 import io.grpc.internal.DnsNameResolver.SrvRecord
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.Objects
 
 @Parcelize

@@ -30,7 +30,7 @@
         </ImageView>
 
         <LinearLayout
-            android:layout_width="295dp"
+            android:layout_width="290dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
             android:orientation="vertical">

@@ -34,7 +34,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.activity_forgot_password.*
+
 import java.io.IOException
 /*
 need to add permissions dialog when user in logged in for the first time
