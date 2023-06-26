@@ -36,9 +36,11 @@ import kotlin.collections.ArrayList
 
 
 class ClientSearchLawyerInCategoryFragment :BaseFragment() {
-    lateinit var currentUser:Client
     private var lawyersList = ArrayList<LawyerData>()
     private lateinit var lawyersAdapter:LawyerDataAdapter
+    var clientName = "idan fadlon"
+    var clientImg ="https://firebasestorage.googleapis.com/v0/b/law-tech-app-30499.appspot.com/o/Image%20gJznMJ9LcGbT2EdrrFNWVACcH9r2.jpg?alt=media&token=88620b43-03ee-49ae-86d7-1b61243db206"
+
 
 
     override fun onCreateView(
@@ -61,17 +63,30 @@ class ClientSearchLawyerInCategoryFragment :BaseFragment() {
                     val lawyerName = document.getString("fullName")
                     val lawyerImage = document.getString("imageURL")
                     val lawyerAbout = document.getString("aboutMe")
+                    val lawyerEmail = document.getString("email")
                     val lawyerId = document.id
-                    if(lawyersList.contains(LawyerData(lawyerName, lawyerImage, lawyerAbout,lawyerId)))
+                    if(lawyersList.contains(LawyerData(lawyerName, lawyerImage, lawyerAbout,lawyerEmail,lawyerId)))
                         continue
                     else {
-                        lawyersList.add(LawyerData(lawyerName, lawyerImage, lawyerAbout,lawyerId))
+                        lawyersList.add(LawyerData(lawyerName, lawyerImage, lawyerAbout,lawyerEmail,lawyerId))
+                    }
+                }
+                val clientCollection = firebase.getCollectionData("/clients")
+                val currentUserId = firebase.getCurrentUserID()
+                val clientQuery = clientCollection.whereEqualTo("uid", currentUserId)
+
+                clientQuery.get().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result) {
+                            clientName = document.getString("fullName").toString()
+                            clientImg = document.getString("imageURL").toString()
+
+                        }
                     }
                 }
                 rv_search_lawyer_in_category.layoutManager = LinearLayoutManager(activity)
                 rv_search_lawyer_in_category.setHasFixedSize(true)
-                loadingUserDetails(currentUser)
-                lawyersAdapter = LawyerDataAdapter(requireActivity(),lawyersList,currentUser,this)
+                lawyersAdapter = LawyerDataAdapter(requireActivity(),lawyersList,currentUserId,clientName,clientImg,this)
 
                 rv_search_lawyer_in_category.adapter = lawyersAdapter
                 sv_search_lawyer_in_category.setOnQueryTextListener(object :SearchView.OnQueryTextListener,
@@ -100,10 +115,7 @@ class ClientSearchLawyerInCategoryFragment :BaseFragment() {
     }
 
 
-    fun loadingUserDetails(currentuser: Client){
-        currentUser = currentuser
-        FirestoreClass().getNotificationsFromFirestore(this@ClientSearchLawyerInCategoryFragment)
-    }
+
     fun loadData(specialization: String){
         addDataToList(specialization) //TODO: get from cardView
 
@@ -128,7 +140,8 @@ class ClientSearchLawyerInCategoryFragment :BaseFragment() {
 
     override fun onResume() {
 //        val category = arguments?.getString("lawyerCategory")
-        loadData("Criminal")
         super.onResume()
+        loadData("Criminal")
+
     }
 }

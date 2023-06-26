@@ -136,10 +136,10 @@ class FirestoreClass {
                             fragment.loadingUserDetails(currentUser as Client)
 
                         }
-                        if (fragment !=null && (fragment is ClientSearchLawyerInCategoryFragment)){
-                            fragment.loadingUserDetails(currentUser as Client)
-
-                        }
+//                        if (fragment !=null && (fragment is ClientSearchLawyerInCategoryFragment)){
+//                            fragment.loadingUserDetails(currentUser as Client)
+//
+//                        }
                     }
                 }
 

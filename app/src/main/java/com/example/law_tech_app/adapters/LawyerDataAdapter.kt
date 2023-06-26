@@ -3,6 +3,7 @@ package com.example.law_tech_app.adapters
 import android.app.Dialog
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,12 +23,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerData>,val currentUser:User, val fragment: BaseFragment
+class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerData>,val currentUserId:String, val clientName:String,val clientImg:String,val fragment: BaseFragment
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var sendMessageDialog: Dialog
     lateinit var lawyerId:String
-    lateinit var clientName:String
-    lateinit var clientImg:String
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(context)
@@ -45,10 +45,14 @@ class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerDa
         if (model.imgUrl!=""){
             GlideLoader(context).loadPicture(model.imgUrl as Any,holder.itemView.iv_lawyer_image)
             holder.itemView.tv_lawyer_name.text = model.name
-            holder.itemView.tv_lawyer_about.text = model.about
+            holder.itemView.tv_lawyer_about.text = "About: "+ model.about
+            holder.itemView.tv_lawyer_email.text = "Email: "+ model.email
             lawyerId = model.id.toString()
             val isExpandable: Boolean = model.isExpandable
             holder.itemView.tv_lawyer_about.visibility = if (isExpandable) View.VISIBLE else View.GONE
+            holder.itemView.tv_lawyer_email.visibility = if (isExpandable) View.VISIBLE else View.GONE
+            holder.itemView.ib_sendMessage.visibility =if (isExpandable) View.VISIBLE else View.GONE
+
 
             holder.itemView.cl_search_lawyer_in_category.setOnClickListener {
                 model.isExpandable = !model.isExpandable
@@ -58,10 +62,13 @@ class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerDa
         }
         else{
             holder.itemView.tv_lawyer_name.text = model.name
-            holder.itemView.tv_lawyer_about.text = model.about
+            holder.itemView.tv_lawyer_about.text = "About: "+ model.about
+            holder.itemView.tv_lawyer_email.text = "Email: "+ model.email
+
             val isExpandable: Boolean = model.isExpandable
             holder.itemView.tv_lawyer_about.visibility = if (isExpandable) View.VISIBLE else View.GONE
-
+            holder.itemView.tv_lawyer_email.visibility = if (isExpandable) View.VISIBLE else View.GONE
+            holder.itemView.ib_sendMessage.visibility =if (isExpandable) View.VISIBLE else View.GONE
             holder.itemView.cl_search_lawyer_in_category.setOnClickListener {
                 model.isExpandable = !model.isExpandable
                 notifyItemChanged(position)
@@ -82,40 +89,31 @@ class LawyerDataAdapter(val context: Context, var lawyersList:ArrayList<LawyerDa
             val dateFormat = SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z")
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+3"))
             val today = Calendar.getInstance().time
-            val firebase = FirestoreClass()
-            val clientCollection = firebase.getCollectionData("/clients")
-            val currentUserId = firebase.getCurrentUserID()
-            val query = clientCollection.whereEqualTo("uid",currentUserId )
+            val msg = Message(
+                "",
+                sendMessageDialog.tie_dialog_sendMessage_subject.text.toString(),
+                currentUserId,
+                clientName,
+                clientImg,
+                lawyerId,
+                sendMessageDialog.tie_dialog_sendMessage_messageBody.text.toString(),
+                dateFormat.format(today).slice(IntRange(0, 21)),
+                false
+            )
+            fragment.showProgressDialog("Loading..")
+            FirestoreClass().addMessageToFirestore(msg, fragment)
+            Log.e("msg",msg.messageBody)
+            fragment.hideProgressDialog()
+            sendMessageDialog.dismiss()
+        }
 
-            query.get().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    for (document in task.result) {
-                        clientName = document.getString("fullName").toString()
-                        clientImg = document.getString("imageURL").toString()
 
-                    }
-                }
-                val msg = Message(
-                    "",
-                    sendMessageDialog.tie_dialog_sendMessage_subject.text.toString(),
-                    currentUserId,
-                    clientName,
-                    clientImg,
-                    lawyerId,
-                    sendMessageDialog.tie_dialog_sendMessage_messageBody.text.toString(),
-                    dateFormat.format(today).slice(IntRange(0, 21)),
-                    false
-                )
-                fragment.showProgressDialog("Loading..")
-                FirestoreClass().addMessageToFirestore(msg, fragment)
-                sendMessageDialog.dismiss()
-
-            }
             sendMessageDialog.setCancelable(true)
             sendMessageDialog.setCanceledOnTouchOutside(true)
             sendMessageDialog.show()
-        }
+
     }
+
 
 
     fun setFilteredList(lawyersList: ArrayList<LawyerData>) {
