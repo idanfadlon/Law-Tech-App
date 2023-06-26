@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.law_tech_app.Firestore.FirestoreClass
 import com.example.law_tech_app.R
 import com.example.law_tech_app.fragments.BaseFragment
-import com.example.law_tech_app.models.Client
 import com.example.law_tech_app.models.Lawyer
 import com.example.law_tech_app.models.Message
 import com.example.law_tech_app.models.User
